@@ -363,8 +363,9 @@ footer { background: var(--ink); padding: 2.4rem clamp(1.25rem, 4vw, 4rem); disp
 .india { color: var(--amber); }
 
 /* FADE */
-.fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
-.fade-up.vis { opacity: 1; transform: translateY(0); }
+.fade-up { opacity: 1; transform: translateY(0); transition: opacity 0.65s ease, transform 0.65s ease; }
+.js-enabled .fade-up { opacity: 0; transform: translateY(28px); }
+.js-enabled .fade-up.vis { opacity: 1; transform: translateY(0); }
 .d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; } .d3 { transition-delay: 0.3s; }
 
 /* RESPONSIVE */
@@ -798,6 +799,7 @@ footer { background: var(--ink); padding: 2.4rem clamp(1.25rem, 4vw, 4rem); disp
 </footer>
 
 <script>
+document.documentElement.classList.add('js-enabled');
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
 }, { threshold: 0.1 });

@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 
 export default function ClientAnimations() {
   useEffect(() => {
+    document.documentElement.classList.add('js-enabled');
+
     const elements = document.querySelectorAll('.fade-up');
 
     if (!('IntersectionObserver' in window)) {
@@ -24,7 +26,10 @@ export default function ClientAnimations() {
 
     elements.forEach((el) => observer.observe(el));
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      document.documentElement.classList.remove('js-enabled');
+    };
   }, []);
 
   return null;
