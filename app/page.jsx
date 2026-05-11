@@ -316,27 +316,6 @@ const pageMarkup = `<!-- NAV -->
   </div>
 </section>
 
-<!-- FUNDING -->
-<section class="funding-section">
-  <div class="funding-inner">
-    <div class="funding-left fade-up">
-      <div class="section-chip chip-amber">Supported By</div>
-      <h2 style="margin-bottom:0.8rem;">Backed by India's<br>innovation ecosystem.</h2>
-      <p class="lead">We're pursuing government grants and impact investors who believe affordable medical technology must be India's next frontier.</p>
-    </div>
-    <div class="funding-right fade-up d1">
-      <div class="grant-grid">
-        <span class="gtag hot">BIRAC BIG Grant ↗</span>
-        <span class="gtag hot">Startup India Seed Fund</span>
-        <span class="gtag">Karnataka ELEVATE</span>
-        <span class="gtag">JDRF India</span>
-        <span class="gtag">IIT Bombay Network</span>
-        <span class="gtag">Angel / Impact VC</span>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- CTA -->
 <section class="cta-section">
   <div class="section-chip chip-white" style="position:relative;z-index:1;margin-bottom:1.5rem;">Join the Movement</div>
