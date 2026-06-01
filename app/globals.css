@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -33,15 +33,23 @@
   --grad-brand: linear-gradient(100deg, var(--cyan) 0%, var(--green) 100%);
   --grad-tri:   linear-gradient(120deg, var(--cyan) 0%, var(--green) 55%, var(--orange) 110%);
 
-  --font:      'Space Grotesk', sans-serif;
-  --mono:      'JetBrains Mono', monospace;
+  --font:      'Oxanium', sans-serif;     /* Headers & UI — geometric, athletic */
+  --mono:      'IBM Plex Mono', monospace; /* Data & body — technical clarity */
 }
 
 html { scroll-behavior: smooth; }
 body {
-  background: var(--bg); color: var(--ink); font-family: var(--font);
-  font-size: 16px; font-weight: 400; line-height: 1.7; overflow-x: hidden;
+  background: var(--bg); color: var(--ink); font-family: var(--mono);
+  font-size: 15px; font-weight: 400; line-height: 1.7; overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+/* Headers & UI use Oxanium; body/data default to IBM Plex Mono (above) */
+h1, h2, .cta-h2, .logo, .ft-logo,
+.nav-links a, .nav-cta,
+.btn-teal, .btn-blue, .btn-white, .btn-ghost, .btn-outline-w, .bolus-btn,
+.prob-title, .mc-title, .tl-title, .feat-txt strong, .af-txt strong,
+.atb-name {
+  font-family: var(--font);
 }
 /* Global grid + glow backdrop */
 body::before {
@@ -73,7 +81,7 @@ nav::after {
   content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
   background: var(--grad-brand); opacity: 0.6;
 }
-.logo { font-family: var(--mono); font-size: 1.3rem; font-weight: 800; letter-spacing: -0.04em; text-decoration: none; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+.logo { font-family: var(--font); font-size: 1.4rem; font-weight: 800; letter-spacing: 0.01em; text-decoration: none; color: var(--ink); display: flex; align-items: center; gap: 8px; }
 .logo-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--green); display: inline-block; animation: blink 2.2s infinite; box-shadow: 0 0 14px var(--green-gl); }
 .logo span { background: var(--grad-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .nav-links { display: flex; align-items: center; gap: clamp(1.2rem, 2.5vw, 2.5rem); }
@@ -120,7 +128,7 @@ nav::after {
 
 h1 {
   font-size: clamp(2.8rem, 6vw, 5.2rem); font-weight: 700;
-  line-height: 1.02; letter-spacing: -0.04em; max-width: 920px;
+  line-height: 1.04; letter-spacing: 0; max-width: 920px;
   position: relative; z-index: 1; color: var(--ink); margin-bottom: 1.2rem;
 }
 h1 em {
@@ -163,7 +171,7 @@ h1 em {
 .chip-amber { color: var(--orange); }
 .chip-white { color: var(--cyan); }
 
-h2 { font-size: clamp(1.9rem, 3.6vw, 2.9rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.12; color: var(--ink); }
+h2 { font-size: clamp(1.9rem, 3.6vw, 2.9rem); font-weight: 700; letter-spacing: -0.005em; line-height: 1.14; color: var(--ink); }
 .lead { color: var(--muted); font-size: 1rem; font-weight: 400; max-width: 540px; line-height: 1.8; }
 
 /* PROBLEM STRIP — glass cards, overlaps hero */
@@ -401,13 +409,13 @@ h2 { font-size: clamp(1.9rem, 3.6vw, 2.9rem); font-weight: 700; letter-spacing: 
     radial-gradient(circle at 50% 100%, var(--orange-gl) 0%, transparent 35%);
   opacity: 0.35; filter: blur(20px);
 }
-.cta-h2 { color: var(--ink); max-width: 720px; margin: 0 auto 1.2rem; position: relative; z-index: 1; font-size: clamp(2.1rem, 4.2vw, 3.2rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.1; }
+.cta-h2 { color: var(--ink); max-width: 720px; margin: 0 auto 1.2rem; position: relative; z-index: 1; font-size: clamp(2.1rem, 4.2vw, 3.2rem); font-weight: 700; letter-spacing: -0.005em; line-height: 1.12; }
 .cta-lead { color: var(--muted); max-width: 480px; margin: 0 auto 2rem; font-size: 1rem; font-weight: 400; position: relative; z-index: 1; }
 .cta-acts { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
 
 /* FOOTER */
 footer { background: #060608; padding: 2.6rem clamp(1.25rem, 4vw, 4rem); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.25rem; border-top: 1px solid var(--border); }
-.ft-logo { font-family: var(--mono); font-size: 1.25rem; font-weight: 800; letter-spacing: -0.04em; color: var(--ink); }
+.ft-logo { font-family: var(--font); font-size: 1.35rem; font-weight: 800; letter-spacing: 0.01em; color: var(--ink); }
 .ft-logo span { background: var(--grad-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .ft-links a { color: var(--muted); font-size: 0.85rem; font-weight: 500; text-decoration: none; margin-left: 2rem; transition: color 0.2s; }
 .ft-links a:hover { color: var(--cyan); }
