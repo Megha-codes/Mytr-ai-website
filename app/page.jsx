@@ -8,7 +8,7 @@ const pageMarkup = `<!-- NAV -->
     <a href="#research">Research</a>
     <a href="#app">App</a>
     <a href="#mission">Mission</a>
-    <a class="nav-cta" href="#app">Try the App →</a>
+    <a class="nav-cta" href="#app">Try the App →</a><a class="nav-cta" href="/mytr-ai.apk" style="margin-left:8px;background:#f97316;" download>Download APK ↓</a>
   </div>
 </nav>
 
