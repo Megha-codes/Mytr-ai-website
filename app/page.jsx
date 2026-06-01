@@ -14,6 +14,7 @@ const pageMarkup = `<!-- NAV -->
 
 <!-- HERO -->
 <section class="hero">
+  <div class="hero-label">India's First Indigenous Insulin Pump</div>
 <h1>Diabetes care built for<br><em>every Indian.</em></h1>
   <p class="hero-sub">Mytr.AI combines India's first indigenously engineered insulin pump with an AI-powered metabolic health app — making world-class diabetes management truly affordable and accessible.</p>
   <div class="hero-actions">
