@@ -4,12 +4,16 @@ import { useEffect } from 'react';
 
 export default function ClientAnimations() {
   useEffect(() => {
-    document.documentElement.classList.add('js-enabled');
+    const root = document.documentElement;
+    root.classList.add('js-enabled');
 
-    const elements = document.querySelectorAll('.fade-up');
+    const elements = Array.from(document.querySelectorAll('.fade-up'));
+    const reveal = (el) => el.classList.add('vis');
+    const revealAll = () => elements.forEach(reveal);
 
+    // No observer support → just show everything.
     if (!('IntersectionObserver' in window)) {
-      elements.forEach((el) => el.classList.add('vis'));
+      revealAll();
       return;
     }
 
@@ -17,7 +21,8 @@ export default function ClientAnimations() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('vis');
+            reveal(entry.target);
+            observer.unobserve(entry.target);
           }
         });
       },
@@ -26,9 +31,14 @@ export default function ClientAnimations() {
 
     elements.forEach((el) => observer.observe(el));
 
+    // Fail-safe: content must never stay invisible. Reveal anything still
+    // hidden shortly after load, even if the observer never fires for it.
+    const fallback = window.setTimeout(revealAll, 1500);
+
     return () => {
+      window.clearTimeout(fallback);
       observer.disconnect();
-      document.documentElement.classList.remove('js-enabled');
+      root.classList.remove('js-enabled');
     };
   }, []);
 

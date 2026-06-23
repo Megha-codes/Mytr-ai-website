@@ -4,108 +4,52 @@ const pageMarkup = `<!-- NAV -->
 <nav>
   <a class="logo" href="#"><span class="logo-dot"></span>Mytr<span>.AI</span></a>
   <div class="nav-links">
-    <a href="#pump">The Pump</a>
-    <a href="#app">App</a>
+    <a href="#crisis">The Crisis</a>
+    <a href="#app">The App</a>
     <a href="#mission">Mission</a>
-    <a class="nav-cta" href="#app">Try the App →</a><a class="nav-cta" href="/mytr-ai.apk" style="margin-left:8px;background:#f97316;" download>Download APK ↓</a>
+    <a class="nav-cta" href="#app">Try the App →</a><a class="nav-cta nav-cta-apk" href="/downloads/mytr-ai.apk" download>Download APK ↓</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-label">India's First Indigenous Insulin Pump</div>
+  <div class="hero-label">Diabetes Technology · Made for India</div>
 <h1>Diabetes care built for<br><em>every Indian.</em></h1>
-  <p class="hero-sub">Mytr.AI combines India's first indigenously engineered insulin pump with an AI-powered metabolic health app — making world-class diabetes management truly affordable and accessible.</p>
+  <p class="hero-sub">Mytr.AI is building technology to transform how India lives with diabetes. We are starting with an AI powered metabolic health app, with one goal: making world class care genuinely affordable and accessible.</p>
   <div class="hero-actions">
     <a class="btn-teal" href="#app">Try the Mytr.AI App →</a>
-    <a class="btn-ghost" href="#pump">Meet the Insulin Pump</a>
+    <a class="btn-ghost" href="/downloads/mytr-ai.apk" download>Download APK ↓</a>
   </div>
+  <p class="apk-note">Android may ask you to allow installs from your browser the first time.</p>
 </section>
 
 <!-- PROBLEM STRIP -->
-<section class="problem-strip">
+<section class="problem-strip" id="crisis">
   <div class="problem-header">
     <div class="section-chip chip-coral">The Problem We're Solving</div>
-    <h2 style="margin-bottom:0.75rem;">India's diabetes care crisis<br>is silent — and massive.</h2>
-    <p class="lead" style="margin: 0 auto;">77 million Indians live with diabetes. The tools that could transform their care are locked behind an impossible price wall. We're breaking it.</p>
+    <h2 style="margin-bottom:0.75rem;">India's diabetes care crisis<br>is silent, and massive.</h2>
+    <p class="lead" style="margin: 0 auto;">77 million Indians live with diabetes. The care that could transform their lives is locked behind an impossible price wall. We are here to change that.</p>
   </div>
   <div class="prob-grid">
-    <div class="prob-card pc-coral fade-up" data-emoji="💸">
-      <span class="prob-icon">💸</span>
-      <div class="prob-stat">₹3–5L</div>
-      <div class="prob-title">Cost of an imported insulin pump</div>
-      <div class="prob-body">Medtronic, Roche, and Abbott pumps are priced beyond reach for over 99% of Indian families — a systemic failure of access that costs lives.</div>
+    <div class="prob-card pc-blue fade-up">
+      <div class="prob-stat">77M</div>
+      <div class="prob-title">Indians living with diabetes</div>
+      <div class="prob-body">One of the largest diabetic populations on earth, served by a healthcare system that was never built to reach all of them.</div>
     </div>
-    <div class="prob-card pc-amber fade-up d1" data-emoji="💉">
-      <span class="prob-icon">📉</span>
+    <div class="prob-card pc-coral fade-up d1">
+      <div class="prob-stat">₹3-5L</div>
+      <div class="prob-title">Cost of modern diabetes care</div>
+      <div class="prob-body">World class diabetes management is priced far beyond what the vast majority of Indian families could ever afford. It is a systemic failure of access.</div>
+    </div>
+    <div class="prob-card pc-amber fade-up d2">
       <div class="prob-stat">&lt;1%</div>
-      <div class="prob-title">Indians with access to pump therapy</div>
-      <div class="prob-body">Despite pump therapy being the clinical gold standard for Type 1 diabetes, virtually no Indian patient can access it — multiple daily injections remain the only option.</div>
+      <div class="prob-title">Access to gold-standard therapy</div>
+      <div class="prob-body">The tools and therapies considered the clinical standard elsewhere in the world remain out of reach for almost every Indian patient.</div>
     </div>
-    <div class="prob-card pc-violet fade-up d2" data-emoji="⚠️">
-      <span class="prob-icon">🧬</span>
+    <div class="prob-card pc-violet fade-up d3">
       <div class="prob-stat">3× higher</div>
-      <div class="prob-title">Risk of complications without proper control</div>
-      <div class="prob-body">Poor glucose management triples the risk of blindness, kidney failure, and limb amputation — all preventable with the right therapy, if only it were affordable.</div>
-    </div>
-    <div class="prob-card pc-blue fade-up d3" data-emoji="🏭">
-      <span class="prob-icon">🔬</span>
-      <div class="prob-stat">Zero</div>
-      <div class="prob-title">Indigenous insulin pumps made in India</div>
-      <div class="prob-body">Not a single insulin pump has ever been indigenously designed and manufactured in India. Every device is imported. Until now — Mytr.AI is changing that.</div>
-    </div>
-  </div>
-</section>
-
-<!-- PUMP SECTION -->
-<section class="pump-section" id="pump">
-  <div class="pump-inner">
-    <div class="section-chip chip-teal">Mytr AI Insulin Pump</div>
-    <h2>Precision insulin delivery,<br>engineered in India.</h2>
-    <div class="pump-grid">
-      <div class="fade-up">
-        <p class="lead">Built from first principles — not licensed, not adapted. The Mytr AI Insulin Pump is designed for India's patients, India's climate, and India's healthcare system.</p>
-        <ul class="feat-list">
-          <li class="feat-item">
-            <div class="feat-ic fi-t">⚙️</div>
-            <div class="feat-txt">
-              <strong>Precision Insulin Delivery</strong>
-              <p>Medical-grade dosing accuracy, engineered to match the standard set by the world's best pumps.</p>
-            </div>
-          </li>
-          <li class="feat-item">
-            <div class="feat-ic fi-v">📡</div>
-            <div class="feat-txt">
-              <strong>Smart & Connected</strong>
-              <p>Designed to work hand-in-hand with the Mytr.AI app for intelligent, guided diabetes management.</p>
-            </div>
-          </li>
-          <li class="feat-item">
-            <div class="feat-ic fi-a">🇮🇳</div>
-            <div class="feat-txt">
-              <strong>Designed for India</strong>
-              <p>Built for India's climate, infrastructure, and healthcare realities — and made to be genuinely accessible.</p>
-            </div>
-          </li>
-        </ul>
-      </div>
-
-      <div class="pump-visual-wrap fade-up d2">
-        <div class="pump-device-wrap">
-          <div class="pump-device">
-            <div class="pump-screen">
-              <div class="psl psl1"></div>
-              <div class="psl psl2"></div>
-              <div class="psl psl3"></div>
-            </div>
-            <div class="pump-btns">
-              <div class="pbtn"></div><div class="pbtn"></div><div class="pbtn"></div>
-            </div>
-            <div class="pump-cannula"></div>
-          </div>
-        </div>
-        <p class="pump-label">Mytr AI Insulin Pump — Prototype in Development</p>
-      </div>
+      <div class="prob-title">Risk of serious complications</div>
+      <div class="prob-body">Without proper control, the risk of blindness, kidney failure, and amputation triples. These are outcomes that are largely preventable with the right care.</div>
     </div>
   </div>
 </section>
@@ -113,87 +57,69 @@ const pageMarkup = `<!-- NAV -->
 <!-- APP SECTION -->
 <section class="app-section" id="app">
   <div class="app-inner">
-    <div class="section-chip chip-blue">Mytr.AI — The App</div>
-    <h2>Your metabolic health,<br>intelligently managed.</h2>
+    <div class="section-chip chip-blue">Mytr.AI, The App</div>
+    <h2>One app for every<br>health journey.</h2>
     <div class="app-grid">
       <div class="phone-outer fade-up">
         <div class="phone-shell">
           <div class="phone-inner">
-            <div class="app-topbar">
-              <div class="atb-greet">Good morning,</div>
-              <div class="atb-name">Arjun 👋</div>
-            </div>
-            <div class="gluco-widget">
-              <div>
-                <div class="gw-lbl">Current Glucose</div>
-                <div class="gw-val">112</div>
-                <div class="gw-unit">mg/dL</div>
+            <div class="app-screen">
+              <div class="app-head">
+                <span class="app-logo-badge"></span>
+                <span class="app-logo-name">Mytr<span>.AI</span></span>
               </div>
-              <div class="gw-badge">↗ In Range</div>
-            </div>
-            <div class="chart-wrap">
-              <div class="c-label">Last 6 hours</div>
-              <div class="bars">
-                <div class="bar bar-lo" style="height:50%"></div>
-                <div class="bar bar-lo" style="height:64%"></div>
-                <div class="bar bar-hi" style="height:82%"></div>
-                <div class="bar bar-hi" style="height:90%"></div>
-                <div class="bar bar-hi" style="height:77%"></div>
-                <div class="bar bar-lo" style="height:60%"></div>
-                <div class="bar bar-hi" style="height:72%"></div>
-                <div class="bar bar-hi" style="height:84%"></div>
+              <div class="app-eyebrow">Health. Intelligently.</div>
+              <div class="app-hero-h">One app for every health journey.</div>
+              <div class="app-hero-sub">From glucose to calories, coaching and fitness.</div>
+              <div class="app-cards">
+                <div class="app-mini-card amc-1"><div class="amc-title">CGM Live</div><div class="amc-sub">Real-time glucose</div></div>
+                <div class="app-mini-card amc-2"><div class="amc-title">Calorie AI</div><div class="amc-sub">Photo meal scan</div></div>
+                <div class="app-mini-card amc-3"><div class="amc-title">Bolus AI</div><div class="amc-sub">Smart dose calc</div></div>
+                <div class="app-mini-card amc-4"><div class="amc-title">Fitness Coach</div><div class="amc-sub">Activity and sleep</div></div>
+              </div>
+              <div class="app-tags">
+                <span>Weight tracking</span><span>Sleep insights</span><span>Stress tracking</span><span>XP and challenges</span>
               </div>
             </div>
-            <div class="metrics-row">
-              <div class="metric-cell"><div class="mc-lbl">Time in Range</div><div class="mc-val t">87%</div></div>
-              <div class="metric-cell"><div class="mc-lbl">HbA1c Est.</div><div class="mc-val b">6.4%</div></div>
-              <div class="metric-cell"><div class="mc-lbl">Active IOB</div><div class="mc-val v">1.2U</div></div>
+            <div class="app-sheet">
+              <div class="app-getstarted">Get Started, It's Free →</div>
+              <div class="app-signin">Already have an account? <strong>Sign in</strong></div>
             </div>
-            <div class="ai-chip">
-              <div class="ai-chip-icon">🧠</div>
-              <div>
-                <div class="ai-chip-text">AI suggests +0.3U correction</div>
-                <div class="ai-chip-sub">Based on your pattern &amp; meal log</div>
-              </div>
-            </div>
-            <div class="bolus-btn">Calculate Bolus →</div>
           </div>
         </div>
         <div class="float1">
-          <div class="fl-label">AI Insight</div>
-          <div class="fl-val1">+0.3 U</div>
-          <div class="fl-sub">Suggested correction</div>
+          <div class="fl-label">Calorie AI</div>
+          <div class="fl-val1">1,840</div>
+          <div class="fl-sub">kcal logged today</div>
         </div>
         <div class="float2">
           <div class="fl-label">Time in range</div>
           <div class="fl-val2">87%</div>
-          <div class="fl-sub">Today · ↑ 4%</div>
+          <div class="fl-sub">Today · 4% better</div>
         </div>
       </div>
 
       <div class="fade-up d2">
-        <p class="lead">Mytr.AI gives every person with diabetes the intelligence of a specialist in their pocket — tracking glucose, predicting trends, guiding dosing, and connecting to the Mytr AI Insulin Pump.</p>
+        <p class="lead">From glucose management to calorie tracking, coaching and fitness, Mytr.AI adapts to your goals. It works just as well for people managing diabetes as for fitness enthusiasts who want to understand their metabolism and train smarter.</p>
         <div class="app-feats">
           <div class="app-feat">
-            <div class="af-ic t">📊</div>
-            <div class="af-txt"><strong>Real-time Glucose Intelligence</strong><p>CGM-synced tracking with AI trend prediction — know what your glucose will do before it happens.</p></div>
+            <div class="af-txt"><strong>CGM Live</strong><p>Real-time glucose tracking with AI trend prediction, so you see where your levels are heading before they get there.</p></div>
           </div>
           <div class="app-feat">
-            <div class="af-ic b">💉</div>
-            <div class="af-txt"><strong>Smart Bolus Calculator</strong><p>Personalised recommendations based on your carbs, current glucose, sensitivity factor, and active insulin on board.</p></div>
+            <div class="af-txt"><strong>Calorie AI</strong><p>Snap a photo of your meal and log nutrition in seconds, with no tedious manual entry.</p></div>
           </div>
           <div class="app-feat">
-            <div class="af-ic v">🧠</div>
-            <div class="af-txt"><strong>Adaptive AI Learning</strong><p>Learns your patterns — meals, activity, sleep — and continuously refines its guidance to match your body uniquely.</p></div>
+            <div class="af-txt"><strong>Bolus AI</strong><p>Smart insulin dose suggestions based on your carbs, current glucose, and active insulin on board.</p></div>
           </div>
           <div class="app-feat">
-            <div class="af-ic a">🔗</div>
-            <div class="af-txt"><strong>Mytr AI Pump Control</strong><p>Wireless control of your insulin pump directly from the app — adjust basals, deliver boluses, review dose history.</p></div>
+            <div class="af-txt"><strong>Fitness Coach</strong><p>Activity, sleep, and recovery insights that adapt to your training, your goals, and your body.</p></div>
           </div>
         </div>
+        <p style="font-size:0.82rem;color:var(--muted);margin-top:0.9rem;line-height:1.6;">Plus weight tracking, sleep and stress insights, and XP challenges to keep you motivated.</p>
         <div class="app-cta-box">
-          <p>Available today — no pump required. Start logging glucose, meals, and insulin, and let Mytr.AI begin learning your patterns from day one.</p>
-          <a class="btn-blue" href="#">Start Using Mytr.AI Free →</a>
+          <p>Available today, whether you are managing diabetes or optimising your fitness. Start logging glucose, meals, and activity, and let Mytr.AI begin learning your patterns from day one.</p>
+          <a class="btn-blue" href="/downloads/mytr-ai.apk" download>Download the Mytr.AI App ↓</a>
+          <p class="apk-note">Android may ask you to allow installs from your browser the first time.</p>
         </div>
       </div>
     </div>
@@ -204,32 +130,39 @@ const pageMarkup = `<!-- NAV -->
 <section class="mission-section" id="mission">
   <div class="mission-inner">
     <div class="section-chip chip-violet">Why We Exist</div>
-    <h2>A system that failed millions.<br>We're fixing it.</h2>
+    <h2>A system that failed millions.<br>We're here to fix it.</h2>
     <div class="mission-cards">
       <div class="mc-card mc-teal fade-up">
-        <span class="mc-emoji">🏥</span>
         <div class="mc-title">The Access Gap</div>
-        <div class="mc-body">Over 77 million Indians live with diabetes, yet insulin pump therapy is inaccessible to nearly all of them. Imported pumps cost ₹3–5 lakhs — more than most families earn in a year.</div>
+        <div class="mc-body">Over 77 million Indians live with diabetes, yet the best tools to manage it are priced out of reach for nearly all of them, often costing more than a family earns in a year.</div>
       </div>
       <div class="mc-card mc-blue fade-up d1">
-        <span class="mc-emoji">🔬</span>
-        <div class="mc-title">Indigenous Engineering</div>
-        <div class="mc-body">The Mytr AI Insulin Pump is built from first principles in India — not licensed or adapted. Every component, algorithm, and design decision is made for the Indian patient and context.</div>
+        <div class="mc-title">Built in India</div>
+        <div class="mc-body">We believe technology for Indian patients should be built in India, for our climate, our infrastructure, and our healthcare realities, from first principles.</div>
       </div>
       <div class="mc-card mc-violet fade-up d2">
-        <span class="mc-emoji">🤝</span>
-        <div class="mc-title">Software + Hardware</div>
-        <div class="mc-body">The Mytr.AI app and Mytr AI Insulin Pump are one integrated system — intelligence and delivery working together for better outcomes, at every economic level.</div>
+        <div class="mc-title">Affordable by Design</div>
+        <div class="mc-body">Affordability isn't an afterthought. It is our starting point. Everything we work on is measured against one question: can an ordinary Indian family actually use it?</div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- TEASER -->
+<section class="teaser-section" id="approach">
+  <div class="teaser-inner">
+    <div class="section-chip chip-teal">What's Next</div>
+    <h2 style="margin-bottom:1.1rem;">The app is just<br>the beginning.</h2>
+    <p class="lead" style="margin:0 auto 1.5rem;">We are a team of engineers and clinicians working at the frontier of diabetes and metabolic health technology, building tools designed to make great care genuinely accessible across India.</p>
+    <p class="lead" style="margin:0 auto;">Something bigger is on the way. We are not ready to share the details just yet, but we are moving fast, and we'd love for you to follow along.</p>
+  </div>
+</section>
+
 <!-- CTA -->
-<section class="cta-section">
+<section class="cta-section" id="contact">
   <div class="section-chip chip-white" style="position:relative;z-index:1;margin-bottom:1.5rem;">Join the Movement</div>
   <h2 class="cta-h2">The future of diabetes care<br>in India starts here.</h2>
-  <p class="cta-lead">Patient, clinician, investor, or believer — we'd love to have you with us.</p>
+  <p class="cta-lead">Patient, clinician, investor, or believer, we'd love to have you with us.</p>
   <div class="cta-acts">
     <a class="btn-white" href="#app">Try the Mytr.AI App →</a>
     <a class="btn-outline-w" href="mailto:hello@mytr.ai">Contact the Team</a>
@@ -240,12 +173,12 @@ const pageMarkup = `<!-- NAV -->
 <footer>
   <div class="ft-logo">Mytr<span>.AI</span></div>
   <div class="ft-links">
-    <a href="#pump">Insulin Pump</a>
-    <a href="#app">App</a>
+    <a href="#crisis">The Crisis</a>
+    <a href="#app">The App</a>
     <a href="#mission">Mission</a>
     <a href="mailto:hello@mytr.ai">Contact</a>
   </div>
-  <div class="ft-copy">Made with ❤️ in <span class="india">India</span> · © 2025 Mytr.AI</div>
+  <div class="ft-copy">Built with care in <span class="india">India</span> · © 2025 Mytr.AI</div>
 </footer>`;
 
 export default function Home() {
