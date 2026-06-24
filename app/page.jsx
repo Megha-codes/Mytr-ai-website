@@ -2,12 +2,12 @@ import ClientAnimations from './ClientAnimations';
 
 const pageMarkup = `<!-- NAV -->
 <nav>
-  <a class="logo" href="#"><span class="logo-dot"></span>Mytr<span>.AI</span></a>
+  <a class="logo" href="#">mytr<span>.ai</span></a>
   <div class="nav-links">
     <a href="#crisis">The Crisis</a>
     <a href="#app">The App</a>
     <a href="#mission">Mission</a>
-    <a class="nav-cta" href="#app">Try the App →</a><a class="nav-cta nav-cta-apk" href="/downloads/mytr-ai.apk" download>Download APK ↓</a>
+    <a class="nav-cta" href="#app">Explore the App →</a><a class="nav-cta nav-cta-apk" href="/downloads/mytr-ai.apk" download>Download APK ↓</a>
   </div>
 </nav>
 
@@ -17,7 +17,7 @@ const pageMarkup = `<!-- NAV -->
 <h1>Diabetes care built for<br><em>every Indian.</em></h1>
   <p class="hero-sub">Mytr.AI is building technology to transform how India lives with diabetes. We are starting with an AI powered metabolic health app, with one goal: making world class care genuinely affordable and accessible.</p>
   <div class="hero-actions">
-    <a class="btn-teal" href="#app">Try the Mytr.AI App →</a>
+    <a class="btn-teal" href="#app">Explore the App →</a>
     <a class="btn-ghost" href="/downloads/mytr-ai.apk" download>Download APK ↓</a>
   </div>
   <p class="apk-note">Android may ask you to allow installs from your browser the first time.</p>
@@ -66,7 +66,7 @@ const pageMarkup = `<!-- NAV -->
             <div class="app-screen">
               <div class="app-head">
                 <span class="app-logo-badge"></span>
-                <span class="app-logo-name">Mytr<span>.AI</span></span>
+                <span class="app-logo-name">mytr<span>.ai</span></span>
               </div>
               <div class="app-eyebrow">Health. Intelligently.</div>
               <div class="app-hero-h">One app for every health journey.</div>
@@ -103,15 +103,19 @@ const pageMarkup = `<!-- NAV -->
         <p class="lead">From glucose management to calorie tracking, coaching and fitness, Mytr.AI adapts to your goals. It works just as well for people managing diabetes as for fitness enthusiasts who want to understand their metabolism and train smarter.</p>
         <div class="app-feats">
           <div class="app-feat">
+            <span class="af-num">01</span>
             <div class="af-txt"><strong>CGM Live</strong><p>Real-time glucose tracking with AI trend prediction, so you see where your levels are heading before they get there.</p></div>
           </div>
           <div class="app-feat">
+            <span class="af-num">02</span>
             <div class="af-txt"><strong>Calorie AI</strong><p>Snap a photo of your meal and log nutrition in seconds, with no tedious manual entry.</p></div>
           </div>
           <div class="app-feat">
+            <span class="af-num">03</span>
             <div class="af-txt"><strong>Bolus AI</strong><p>Smart insulin dose suggestions based on your carbs, current glucose, and active insulin on board.</p></div>
           </div>
           <div class="app-feat">
+            <span class="af-num">04</span>
             <div class="af-txt"><strong>Fitness Coach</strong><p>Activity, sleep, and recovery insights that adapt to your training, your goals, and your body.</p></div>
           </div>
         </div>
@@ -164,14 +168,14 @@ const pageMarkup = `<!-- NAV -->
   <h2 class="cta-h2">The future of diabetes care<br>in India starts here.</h2>
   <p class="cta-lead">Patient, clinician, investor, or believer, we'd love to have you with us.</p>
   <div class="cta-acts">
-    <a class="btn-white" href="#app">Try the Mytr.AI App →</a>
+    <a class="btn-white" href="#app">Explore the App →</a>
     <a class="btn-outline-w" href="mailto:hello@mytr.ai">Contact the Team</a>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="ft-logo">Mytr<span>.AI</span></div>
+  <div class="ft-logo">mytr<span>.ai</span></div>
   <div class="ft-links">
     <a href="#crisis">The Crisis</a>
     <a href="#app">The App</a>

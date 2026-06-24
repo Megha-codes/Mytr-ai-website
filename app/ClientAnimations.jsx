@@ -7,6 +7,14 @@ export default function ClientAnimations() {
     const root = document.documentElement;
     root.classList.add('js-enabled');
 
+    // Transparent nav over the hero, frosted glass once scrolled.
+    const nav = document.querySelector('nav');
+    const onScroll = () => {
+      if (nav) nav.classList.toggle('scrolled', window.scrollY > 12);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
     const elements = Array.from(document.querySelectorAll('.fade-up'));
     const reveal = (el) => el.classList.add('vis');
     const revealAll = () => elements.forEach(reveal);
@@ -37,6 +45,7 @@ export default function ClientAnimations() {
 
     return () => {
       window.clearTimeout(fallback);
+      window.removeEventListener('scroll', onScroll);
       observer.disconnect();
       root.classList.remove('js-enabled');
     };
