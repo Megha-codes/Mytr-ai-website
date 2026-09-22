@@ -19,8 +19,8 @@ const manrope = Manrope({
 });
 
 export const metadata = {
-  title: 'Mytr.AI - Redefining Diabetes Care in India',
-  description: 'Affordable insulin pump technology and AI-powered metabolic health tools for diabetes care in India.',
+  title: 'Mytr.AI — Diabetes Technology, Made for India',
+  description: 'An always-on desk display and an AI-powered health app, sharing one account. Affordable, accessible diabetes technology built for India.',
 };
 
 export default function RootLayout({ children }) {
