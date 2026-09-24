@@ -35,7 +35,7 @@ const pageMarkup = `<div class="galaxy" aria-hidden="true">
     <nav class="nav-links">
       <a href="#product">Product</a><a href="#how">How it works</a><a href="#body">Health intelligence</a><a href="#home">For your home</a><a href="#vision">Vision</a>
     </nav>
-    <div class="nav-cta"><a href="#waitlist" class="btn btn-primary">Join the waitlist</a></div>
+    <div class="nav-cta"><a href="/downloads/mytr-ai.apk" download class="btn btn-secondary">Download APK ↓</a><a href="#waitlist" class="btn btn-primary">Join the waitlist</a></div>
   </div>
 </header>
 
@@ -46,10 +46,12 @@ const pageMarkup = `<div class="galaxy" aria-hidden="true">
     <h1>Understand your body.<br><span class="sub">Improve how you live.</span></h1>
     <p class="lead">One intelligent health interface that brings together your body, your habits, and the environment around you. It makes sense of how they move together.</p>
     <div class="hero-cta">
-      <a href="#product" class="btn btn-primary">Explore the product</a>
+      <a href="/downloads/mytr-ai.apk" download class="btn btn-primary">Download APK ↓</a>
+      <a href="#product" class="btn btn-secondary">Explore the product</a>
       <a href="#waitlist" class="btn btn-secondary">Join the waitlist</a>
     </div>
     <p class="hero-note"><span class="lv"></span> V1.1 · a physical health intelligence device, plus a companion app</p>
+    <p class="apk-note">Android may ask you to allow installs from your browser the first time.</p>
 
     <div class="stage" aria-hidden="true">
       <div class="uglow blue"></div><div class="uglow red"></div>
