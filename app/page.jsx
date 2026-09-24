@@ -1,318 +1,305 @@
-import ClientAnimations from './ClientAnimations';
+import SiteScript from './SiteScript';
 
 /*
-  NOTE ON IMAGES
-  ---------------
-  This redesign ships with zero external image assets — the "device + phone"
-  visuals below (hero, features, etc.) are hand-built with HTML/CSS, the same
-  approach the previous version of this page used. No product photography was
-  found in the repo (no /public directory) and no image path was supplied, so
-  nothing here depends on a file that might 404.
+  V1.1 rebuild — ported from a standalone static site (mytr-site/, see
+  README there) authored outside this repo. Markup/CSS/JS structure is
+  kept 1:1 with that source so future updates from the same source can
+  be re-pasted with minimal diff:
+    - assets/img/*, favicon.png, logo-mask.png -> public/assets/
+    - assets/styles.css -> app/globals.css (only change: literal
+      "DM Sans"/"Manrope" font-family strings swapped for the
+      var(--font-dm-sans)/var(--font-manrope) custom properties that
+      next/font/google injects in layout.js, and the CSS mask url()
+      for the logo mark made root-relative since it now lives in a
+      Next-bundled stylesheet rather than being loaded from assets/)
+    - assets/app.js -> ./SiteScript.jsx (dangerouslySetInnerHTML does
+      not execute <script> tags, so this had to become a real client
+      component; logic is otherwise unchanged)
 
-  To swap in real photography, the best drop-in spots are:
-    1. .eco-visual in the hero — replace the two .device-shell / .phone-shell
-       blocks with <img src="/images/hero-device.png" .../> and
-       <img src="/images/hero-app.png" .../> (desk unit + phone, ideally shot
-       together or on a matching background).
-    2. .connect-card in "How the Ecosystem Connects" — a photo of the device's
-       4 display modes and a few app screens would strengthen this section.
-    3. .feat-card icons could become small screenshots for the two device
-       features ("4 Display Modes", "Offline Alarms").
-  Drop files in /public/images/ and reference them as /images/<file>.
+  NOTE: this version has no /downloads/mytr-ai.apk button anywhere —
+  it replaces the app-download CTA with a waitlist form. That's a
+  deliberate content change from the source file, not an omission
+  introduced here.
 */
 
-const pageMarkup = `<!-- ICON SPRITE -->
-<svg style="display:none" aria-hidden="true">
-  <symbol id="ic-cgm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/>
-    <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2"/>
-  </symbol>
-  <symbol id="ic-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 20l4-1L19 8l-3-3L5 16l-1 4z"/><path d="M14.5 5.5l3 3"/>
-  </symbol>
-  <symbol id="ic-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13.4" r="3.4"/>
-  </symbol>
-  <symbol id="ic-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M2.5 12h4l2-6.5 4 13 2-6.5h5"/>
-  </symbol>
-  <symbol id="ic-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M6.8 18a4.2 4.2 0 1 1 .5-8.37A5.6 5.6 0 0 1 17.9 9.1 4.4 4.4 0 0 1 17.2 18z"/>
-  </symbol>
-  <symbol id="ic-monitor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="3" y="4.5" width="18" height="12" rx="2.2"/><path d="M8.5 20h7M12 16.5V20"/>
-  </symbol>
-  <symbol id="ic-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 5h16v11H9.5l-4 4V5z"/>
-    <circle cx="9" cy="10.4" r="0.9" fill="currentColor" stroke="none"/><circle cx="12.5" cy="10.4" r="0.9" fill="currentColor" stroke="none"/><circle cx="16" cy="10.4" r="0.9" fill="currentColor" stroke="none"/>
-  </symbol>
-  <symbol id="ic-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 19.5V11M10 19.5V5M16 19.5v-8"/><path d="M2.5 19.5h19"/>
-  </symbol>
-  <symbol id="ic-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M6 10.2a6 6 0 1 1 12 0c0 4 1.5 5.3 1.5 5.3H4.5S6 14.2 6 10.2z"/><path d="M10 18.8a2 2 0 0 0 4 0"/>
-  </symbol>
-  <symbol id="ic-droplet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 3.2s6.2 7.3 6.2 11.3a6.2 6.2 0 1 1-12.4 0C5.8 10.5 12 3.2 12 3.2z"/>
-  </symbol>
-  <symbol id="ic-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M20 6L9 17l-5-5"/>
-  </symbol>
-  <symbol id="ic-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M9 5l7 7-7 7"/>
-  </symbol>
-  <symbol id="ic-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11.6 18.2h0.8" stroke-width="2"/>
-  </symbol>
-</svg>
+const pageMarkup = `<div class="galaxy" aria-hidden="true">
+  <div class="stars"></div>
+  <div class="aurora"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div></div>
+  <canvas id="field"></canvas>
+</div>
 
 <!-- NAV -->
-<nav>
-  <a class="logo" href="#">mytr<span>.ai</span></a>
-  <div class="nav-links">
-    <a href="#crisis">The Crisis</a>
-    <a href="#ecosystem">The Ecosystem</a>
-    <a href="#features">Features</a>
-    <a class="nav-cta" href="#ecosystem">Explore →</a><a class="nav-cta nav-cta-apk" href="/downloads/mytr-ai.apk" download>Download APK ↓</a>
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a href="#top" class="brand"><span class="logo-mark"></span>mytr.ai</a>
+    <nav class="nav-links">
+      <a href="#product">Product</a><a href="#how">How it works</a><a href="#body">Health intelligence</a><a href="#home">For your home</a><a href="#vision">Vision</a>
+    </nav>
+    <div class="nav-cta"><a href="#waitlist" class="btn btn-primary">Join the waitlist</a></div>
   </div>
-</nav>
+</header>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="eyebrow">Diabetes Technology · Made for India</div>
-    <h1>Your metabolic health,<br>on your desk <em>and</em> in your pocket.</h1>
-    <p class="hero-sub">Mytr.AI is one connected ecosystem: an always-on desk display and an AI-powered health app, sharing a single account. Built to make world-class diabetes care genuinely affordable and accessible for every Indian family.</p>
-    <div class="hero-actions">
-      <a class="btn-primary" href="/downloads/mytr-ai.apk" download>Download APK ↓</a>
-      <a class="btn-ghost" href="#ecosystem">Explore the Ecosystem →</a>
+<section class="s-dark hero">
+  <div class="wrap hero-center">
+    <p class="eyebrow">Your health, one interface</p>
+    <h1>Understand your body.<br><span class="sub">Improve how you live.</span></h1>
+    <p class="lead">One intelligent health interface that brings together your body, your habits, and the environment around you. It makes sense of how they move together.</p>
+    <div class="hero-cta">
+      <a href="#product" class="btn btn-primary">Explore the product</a>
+      <a href="#waitlist" class="btn btn-secondary">Join the waitlist</a>
     </div>
-    <p class="apk-note">Android may ask you to allow installs from your browser the first time.</p>
+    <p class="hero-note"><span class="lv"></span> V1.1 · a physical health intelligence device, plus a companion app</p>
 
-    <div class="eco-panel fade-up d1">
-      <div class="eco-visual">
-        <div class="eco-node">
-          <div class="device-shell">
-            <div class="device-screen">
-              <div class="device-mode-label">Glucose · Live</div>
-              <div class="device-glucose">118</div>
-              <div class="device-unit">mg/dL · steady</div>
-              <div class="device-spark"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-            </div>
-          </div>
-          <div class="eco-caption">Desk Display</div>
+    <div class="stage" aria-hidden="true">
+      <div class="uglow blue"></div><div class="uglow red"></div>
+      <div class="orbits">
+        <svg viewBox="0 0 460 300">
+          <g class="ring-a"><ellipse cx="230" cy="150" rx="226" ry="132" fill="none" stroke="rgba(10,108,255,.16)" stroke-width="1" stroke-dasharray="2 9"/><circle cx="456" cy="150" r="2.6" fill="#0A6CFF"/></g>
+          <g class="ring-b"><ellipse cx="230" cy="150" rx="176" ry="98" fill="none" stroke="rgba(255,51,85,.16)" stroke-width="1" stroke-dasharray="1 10"/><circle cx="54" cy="150" r="2.4" fill="#FF3355"/></g>
+        </svg>
+      </div>
+      <img class="render" src="/assets/img/hero-device.webp" alt="mytr desk device showing the health dashboard">
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="s-white pad-y">
+  <div class="wrap">
+    <p class="eyebrow">The problem</p>
+    <div class="prob-grid">
+      <div>
+        <h2 class="prob-head reveal">Your health is scattered across your life.</h2>
+        <div class="scatter reveal">
+          <span class="chip"><i></i>Apple Health</span><span class="chip"><i></i>Garmin</span><span class="chip"><i></i>Fitbit</span>
+          <span class="chip"><i></i>Oura</span><span class="chip"><i></i>Whoop</span><span class="chip"><i></i>Samsung Health</span>
+          <span class="chip"><i></i>CGM</span><span class="chip"><i></i>Food log</span><span class="chip"><i></i>Air quality</span>
         </div>
+      </div>
+      <div class="scene reveal">
+        <img src="/assets/img/problem-scene.webp" alt="A bedside table with the mytr device, a phone, a smartwatch, an air-quality monitor and a sensor, each showing separate health data">
+      </div>
+    </div>
+    <p class="statement reveal">Your body doesn't experience them separately. <span class="q">Why should you?</span></p>
+  </div>
+</section>
 
-        <div class="eco-sync">
-          <div class="sync-line"></div>
-          <div class="sync-pill">One account · always in sync</div>
-          <div class="sync-line"></div>
+<!-- PRODUCT -->
+<section class="s-white pad-y" id="product" style="padding-top:0;">
+  <div class="wrap">
+    <div class="head" style="max-width:680px;">
+      <p class="eyebrow">The device</p>
+      <h2>One screen. Your whole health picture.</h2>
+      <p class="lead">Every source you already use flows into one place. mytr reads your body, your behaviour, and your environment continuously, and resolves it into a single living display.</p>
+    </div>
+    <div class="info-wrap">
+      <div class="uglow blue"></div><div class="uglow red"></div>
+      <img class="info-render reveal" src="/assets/img/connected-screen.webp" alt="mytr screen connecting sleep, glucose, HRV, activity, and environment sources">
+    </div>
+
+    <div class="band">
+      <div class="bstage">
+        <div class="uglow blue"></div>
+        <img class="band-render reveal" src="/assets/img/device-phone.webp" alt="mytr desk device and companion phone app">
+      </div>
+      <div>
+        <p class="eyebrow">On your desk, and in your pocket</p>
+        <h2 style="font-size:clamp(1.7rem,3.4vw,2.4rem);">A calm display at home. The full picture on your phone.</h2>
+        <p class="lead" style="margin-top:14px;">The desk device keeps your health visible in the moments that matter. The companion app carries the same intelligence with you, everywhere.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BODY -->
+<section class="s-grey pad-y" id="body">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">Body</p>
+      <h2>Know what your body is doing.</h2>
+      <p class="lead">Every metric is read against your own history, so a good day and an off day actually look different.</p>
+    </div>
+    <div class="body-live">
+      <div class="carousel" id="carousel">
+        <div class="slides" id="slides">
+          <div class="slide active"><img src="/assets/img/carousel-1-morning.webp" alt="Waking up at home, the mytr display showing recovery and sleep"><div class="scrim"></div><span class="ctx">Morning at home</span></div>
+          <div class="slide"><img src="/assets/img/carousel-2-run.webp" alt="An outdoor run tracked on phone and display"><div class="scrim"></div><span class="ctx">During your run</span></div>
+          <div class="slide"><img src="/assets/img/carousel-3-gym.webp" alt="A gym workout with CGM and live glucose on the display"><div class="scrim"></div><span class="ctx">At the gym</span></div>
+          <div class="slide"><img src="/assets/img/carousel-4-meal.webp" alt="A meal with the glucose response shown on the display"><div class="scrim"></div><span class="ctx">After your meal</span></div>
+          <div class="slide"><img src="/assets/img/carousel-5-work.webp" alt="Working at a desk with focus mode and environment data"><div class="scrim"></div><span class="ctx">While you work</span></div>
+          <div class="slide"><img src="/assets/img/carousel-6-sleep.webp" alt="Sleeping at night with sleep and environment monitoring"><div class="scrim"></div><span class="ctx">While you sleep</span></div>
         </div>
+        <button class="cnav prev" id="cprev" aria-label="Previous situation">&#8249;</button>
+        <button class="cnav next" id="cnext" aria-label="Next situation">&#8250;</button>
+        <div class="dots" id="dots"></div>
+      </div>
 
-        <div class="eco-node">
-          <div class="phone-shell">
-            <div class="phone-inner">
-              <div class="phone-app-head"><span class="phone-app-badge"></span><span class="phone-app-name">mytr.ai</span></div>
-              <div class="phone-ring"><div class="phone-ring-inner"><span class="phone-ring-val">87%</span><span class="phone-ring-lbl">In range</span></div></div>
-              <div class="phone-row">
-                <div class="phone-chip"><svg><use href="#ic-cgm"/></svg><span>CGM</span></div>
-                <div class="phone-chip"><svg><use href="#ic-camera"/></svg><span>Food</span></div>
-                <div class="phone-chip"><svg><use href="#ic-activity"/></svg><span>Health</span></div>
-              </div>
-              <div class="phone-chat">Ask the AI coach…</div>
-            </div>
-          </div>
-          <div class="eco-caption">Mobile App</div>
+      <div class="live-panel">
+        <div class="insight-card">
+          <span class="badge">Aarna insight</span>
+          <p id="insightText">Your recovery is 9% higher than your 30-day baseline.</p>
+        </div>
+        <div class="metrics4">
+          <div class="m"><div class="k">Sleep</div><div class="v">7h 28m</div></div>
+          <div class="m"><div class="k">HRV</div><div class="v">68 <small>ms</small></div></div>
+          <div class="m"><div class="k">Recovery</div><div class="v">84</div></div>
+          <div class="m"><div class="k r">Resting HR</div><div class="v">58 <small>bpm</small></div></div>
+        </div>
+        <div class="trend">
+          <div class="trend-top"><span class="trend-title" id="trendTitle">Recovery · last 7 days</span><span class="trend-legend"><i class="base"></i>baseline<i class="today"></i>today</span></div>
+          <svg class="trend-svg" viewBox="0 0 320 120" preserveAspectRatio="none">
+            <path class="area" id="trArea"></path>
+            <polyline class="base" id="trBase"></polyline>
+            <polyline class="today" id="trToday"></polyline>
+            <circle class="evtring" id="trEvtRing" r="6"></circle>
+            <circle class="evt" id="trEvt" r="3"></circle>
+          </svg>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- THE CRISIS -->
-<section class="crisis-section" id="crisis">
-  <div class="crisis-inner">
-    <div class="section-head">
-      <div class="section-chip">The Problem We're Solving</div>
-      <h2 style="margin-bottom:0.9rem;">India's diabetes crisis is silent, and scattered.</h2>
-      <p class="lead">77 million Indians live with diabetes. The tools to manage it well exist, but they're priced out of reach, and even for those who do track their health, the numbers end up scattered across a CGM app, a fitness tracker, and a food diary that never talk to each other.</p>
+<!-- ENVIRONMENT -->
+<section class="s-dark pad-y" id="home">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">Environment</p>
+      <h2>Because your environment is part of your biology.</h2>
+      <p class="lead">The room you sleep in shapes how you recover. mytr reads it continuously and connects it back to your body.</p>
     </div>
-    <div class="crisis-grid">
-      <div class="stat-card sc-1 fade-up">
-        <div class="stat-num">77M</div>
-        <div class="stat-title">Indians living with diabetes</div>
-        <div class="stat-body">One of the largest diabetic populations on earth, served by a system that was never built to reach all of them.</div>
+    <div class="room-grid">
+      <div class="envstage">
+        <div class="uglow blue"></div><div class="uglow red"></div>
+        <img class="env-render" src="/assets/img/device-front.webp" alt="mytr desk device sensing the room">
       </div>
-      <div class="stat-card sc-2 fade-up d1">
-        <div class="stat-num">&lt;1%</div>
-        <div class="stat-title">Access to gold-standard tools</div>
-        <div class="stat-body">CGMs and connected care, considered standard elsewhere, remain out of reach for almost every Indian patient.</div>
-      </div>
-      <div class="stat-card sc-3 fade-up d2">
-        <div class="stat-num">5+ apps</div>
-        <div class="stat-title">Where a patient's data lives today</div>
-        <div class="stat-body">Glucose in one app, food in another, steps in a third. Nothing connects, so nothing adds up to a full picture.</div>
-      </div>
-      <div class="stat-card sc-4 fade-up d3">
-        <div class="stat-num">3× higher</div>
-        <div class="stat-title">Risk of serious complications</div>
-        <div class="stat-body">Without consistent visibility, the risk of blindness, kidney failure and amputation triples, and is largely preventable.</div>
+      <div class="room">
+        <div class="cellx"><div class="v num">24°C</div><div class="k">Temperature</div></div>
+        <div class="cellx"><div class="v num">52%</div><div class="k">Humidity</div></div>
+        <div class="cellx"><div class="v"><b>Good</b></div><div class="k">Air quality</div></div>
+        <div class="cellx"><div class="v num">780</div><div class="k">CO₂ ppm</div></div>
+        <div class="cellx"><div class="v num">32</div><div class="k">Noise dB</div></div>
+        <div class="cellx"><div class="v"><b>Low</b></div><div class="k">Light</div></div>
       </div>
     </div>
-    <p class="crisis-bridge">Mytr.AI exists to pull every one of those numbers back into <span>one account</span>, visible wherever you happen to look.</p>
+    <div class="env-note"><span class="badge">Pattern</span><span>Your best sleep this month came on nights your bedroom stayed between 23-25°C.</span></div>
   </div>
 </section>
 
-<!-- HOW THE ECOSYSTEM CONNECTS -->
-<section class="connect-section" id="ecosystem">
-  <div class="connect-inner">
-    <div class="section-head">
-      <div class="section-chip">How It Works</div>
-      <h2 style="margin-bottom:0.9rem;">One account. Two surfaces.</h2>
-      <p class="lead">The app and the desk device aren't two separate products, they're two views into the same account. Everything you feed in from your phone shows up on your desk, automatically.</p>
+<!-- CORRELATION -->
+<section class="s-white pad-y" id="how">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">Correlation engine</p>
+      <h2>See what your data can't show you alone.</h2>
+      <p class="lead">Single metrics tell you what happened. mytr traces how one thing led to the next, across body, behaviour, and environment.</p>
     </div>
-
-    <div class="flow-row">
-      <div class="flow-node fn-1 fade-up">
-        <div class="flow-ic"><svg><use href="#ic-pencil"/></svg></div>
-        <h3>You feed it</h3>
-        <p>Connect a CGM, log manually, snap a meal photo, or sync your wearable.</p>
+    <div class="chains">
+      <div class="chain">
+        <h3>An ordinary late dinner</h3>
+        <div class="step"><span class="node">Late dinner</span><span class="tag">behaviour</span></div>
+        <div class="flow"></div>
+        <div class="step"><span class="node">Higher glucose response</span><span class="tag">glucose</span></div>
+        <div class="flow"></div>
+        <div class="step"><span class="node">Later sleep onset</span><span class="tag">sleep</span></div>
+        <div class="flow"></div>
+        <div class="step"><span class="node">Lower overnight HRV</span><span class="tag">body</span></div>
+        <div class="flow"></div>
+        <div class="step"><span class="node">Lower recovery</span><span class="tag">recovery</span></div>
       </div>
-      <div class="flow-arrow"><svg><use href="#ic-arrow"/></svg></div>
-      <div class="flow-node fn-2 fade-up d1">
-        <div class="flow-ic"><svg><use href="#ic-cloud"/></svg></div>
-        <h3>The app is the hub</h3>
-        <p>Every reading, meal and metric lands in your Mytr.AI account and becomes insight.</p>
-      </div>
-      <div class="flow-arrow"><svg><use href="#ic-arrow"/></svg></div>
-      <div class="flow-node fn-3 fade-up d2">
-        <div class="flow-ic"><svg><use href="#ic-monitor"/></svg></div>
-        <h3>The device shows it</h3>
-        <p>Your desk display pulls from that same account, always on and glanceable, even offline.</p>
+      <div class="chain">
+        <h3>A warm, stuffy room</h3>
+        <div class="step"><span class="node">Poor air quality</span><span class="tag">environment</span></div>
+        <div class="plus">+</div>
+        <div class="step"><span class="node">Higher bedroom temperature</span><span class="tag">environment</span></div>
+        <div class="flow"></div>
+        <div class="step"><span class="node">More sleep disturbance</span><span class="tag">sleep</span></div>
+        <div class="flow"></div>
+        <div class="step"><span class="node">Lower recovery</span><span class="tag">recovery</span></div>
       </div>
     </div>
+    <p class="disclaimer">These insights describe patterns and associations in your personal data. They are not medical diagnoses.</p>
+  </div>
+</section>
 
-    <div class="connect-cards">
-      <div class="connect-card cc-app fade-up">
-        <div class="connect-card-head">
-          <div class="connect-card-ic"><svg><use href="#ic-phone"/></svg></div>
-          <div><div class="connect-card-eyebrow">The App</div><h3>Your control center</h3></div>
-        </div>
-        <ul class="connect-list">
-          <li><svg><use href="#ic-check"/></svg>Connect a CGM, or log glucose manually in seconds</li>
-          <li><svg><use href="#ic-check"/></svg>Snap a photo to log food and estimate carbs automatically</li>
-          <li><svg><use href="#ic-check"/></svg>Sync steps, sleep and HRV from your wearable</li>
-          <li><svg><use href="#ic-check"/></svg>Ask the AI chatbot for plain-language coaching, anytime</li>
-        </ul>
-      </div>
-      <div class="connect-card cc-device fade-up d1">
-        <div class="connect-card-head">
-          <div class="connect-card-ic"><svg><use href="#ic-monitor"/></svg></div>
-          <div><div class="connect-card-eyebrow">The Device</div><h3>Your glanceable ally</h3></div>
-        </div>
-        <ul class="connect-list">
-          <li><svg><use href="#ic-check"/></svg>Always-on desk screen, nothing to unlock or open</li>
-          <li><svg><use href="#ic-check"/></svg>Switches between 4 display modes with one tap</li>
-          <li><svg><use href="#ic-check"/></svg>Offline alarms for highs and lows, no wifi required</li>
-          <li><svg><use href="#ic-check"/></svg>Reads from the same account as the app, zero extra setup</li>
-        </ul>
-      </div>
+<!-- AI · AARNA -->
+<section class="s-dark pad-y">
+  <div class="wrap ai-head">
+    <div class="ai-orb" aria-hidden="true"><span class="r1"></span><span class="r2"></span><span class="core"></span></div>
+    <div class="eq" aria-hidden="true"></div>
+    <p class="eyebrow">Meet Aarna</p>
+    <h2 style="font-size:clamp(1.9rem,4.2vw,3rem);">Ask Aarna anything.</h2>
+    <p class="lead" style="margin:14px auto 0;">Aarna is the intelligence inside mytr. Ask a plain question, get a clear answer grounded in your own data.</p>
+  </div>
+  <div class="wrap">
+    <div class="chat" id="chat">
+      <div class="msg you"><div class="who">You</div><div class="bubble">Why have I been sleeping badly this week?</div></div>
+      <div class="msg ai"><div class="who">Aarna</div><div class="bubble">Your sleep is down 52 minutes against your 30-day average. Three things stand out:
+        <ul><li>You've gone to bed about an hour later than usual.</li><li>Caffeine has shifted roughly 2 hours later in the day.</li><li>Your bedroom has run 2.1°C warmer on average.</li></ul></div></div>
+      <div class="msg you"><div class="who">You</div><div class="bubble">What should I change first?</div></div>
+      <div class="msg ai"><div class="who">Aarna</div><div class="bubble">Start with bedtime. It has the strongest association with your recent recovery decline. The room temperature is worth fixing next.</div></div>
     </div>
   </div>
 </section>
 
-<!-- FEATURES -->
-<section class="features-section" id="features">
-  <div class="features-inner">
-    <div class="section-head">
-      <div class="section-chip">Everything In The Ecosystem</div>
-      <h2 style="margin-bottom:0.9rem;">Built to cover the full picture.</h2>
-      <p class="lead">Eight features, one connected system, app-first and device-backed.</p>
+<!-- VISION -->
+<section class="s-grey pad-y" id="vision">
+  <div class="wrap center-col">
+    <p class="eyebrow">Our vision</p>
+    <h2 class="cta-head">Your biology is telling a story.</h2>
+    <p class="lead" style="margin:16px auto 0;">We're building the interface that helps you understand it. Starting with your body and your home today, and working toward health technology that becomes more predictive, personalised, and proactive over time.</p>
+    <div class="roadmap">
+      <svg viewBox="0 0 560 50" aria-hidden="true">
+        <line class="rl" x1="50" y1="25" x2="280" y2="25"/>
+        <line class="rd" x1="280" y1="25" x2="510" y2="25"/>
+        <circle cx="50" cy="25" r="6" fill="#0A6CFF"/>
+        <circle cx="280" cy="25" r="6" fill="#fff" stroke="#0A6CFF" stroke-width="1.5"/>
+        <circle cx="510" cy="25" r="4" fill="none" stroke="#86868b" stroke-width="1.5"/>
+      </svg>
     </div>
-    <div class="feat-grid">
-      <div class="feat-card fade-up">
-        <span class="feat-badge fb-app">App</span>
-        <div class="feat-ic"><svg><use href="#ic-cgm"/></svg></div>
-        <h3>Glucose Tracking</h3>
-        <p>Real-time CGM feed or manual entry, with AI trend prediction so you see where you're headed.</p>
-      </div>
-      <div class="feat-card fade-up d1">
-        <span class="feat-badge fb-app">App</span>
-        <div class="feat-ic"><svg><use href="#ic-camera"/></svg></div>
-        <h3>Food Photo → Carb AI</h3>
-        <p>Snap a photo of your meal and get an instant carb and nutrition estimate, no manual lookup.</p>
-      </div>
-      <div class="feat-card fade-up d2">
-        <span class="feat-badge fb-app">App</span>
-        <div class="feat-ic"><svg><use href="#ic-activity"/></svg></div>
-        <h3>Health Metrics</h3>
-        <p>Steps, sleep and HRV pulled into one timeline alongside your glucose.</p>
-      </div>
-      <div class="feat-card fade-up d3">
-        <span class="feat-badge fb-app">App</span>
-        <div class="feat-ic"><svg><use href="#ic-droplet"/></svg></div>
-        <h3>Water Tracking</h3>
-        <p>Simple daily hydration logging with gentle reminders to keep you on track.</p>
-      </div>
-      <div class="feat-card fade-up">
-        <span class="feat-badge fb-app">App</span>
-        <div class="feat-ic"><svg><use href="#ic-chart"/></svg></div>
-        <h3>Analytics &amp; Insights</h3>
-        <p>Trends, patterns and weekly reports that turn raw numbers into decisions.</p>
-      </div>
-      <div class="feat-card fade-up d1">
-        <span class="feat-badge fb-app">App</span>
-        <div class="feat-ic"><svg><use href="#ic-chat"/></svg></div>
-        <h3>AI Chatbot</h3>
-        <p>Ask questions in plain language and get coaching grounded in your own data.</p>
-      </div>
-      <div class="feat-card fade-up d2">
-        <span class="feat-badge fb-device">Device</span>
-        <div class="feat-ic"><svg><use href="#ic-monitor"/></svg></div>
-        <h3>4 Display Modes</h3>
-        <p>Switch the desk display between glucose focus, trend graph, daily agenda and a minimal clock.</p>
-      </div>
-      <div class="feat-card fade-up d3">
-        <span class="feat-badge fb-device">Device</span>
-        <div class="feat-ic"><svg><use href="#ic-bell"/></svg></div>
-        <h3>Offline Alarms</h3>
-        <p>High and low alerts that still fire on the device, even without wifi or a phone nearby.</p>
-      </div>
-    </div>
+    <div class="rm-labels"><span>Today · understand</span><span>Next · act</span></div>
   </div>
 </section>
 
-<!-- DOWNLOAD / CTA -->
-<section class="cta-section" id="download">
-  <div class="cta-inner">
-    <div class="section-chip on-dark" style="position:relative;z-index:1;">Get Started</div>
-    <h2>The future of diabetes care in India starts here.</h2>
-    <p class="lead">Download the app to get started today, your account carries over to the desk display the moment it's set up.</p>
-    <div class="cta-acts">
-      <a class="btn-light" href="/downloads/mytr-ai.apk" download>Download the App ↓</a>
-      <a class="btn-outline-w" href="mailto:hello@mytr.ai">Ask About the Desk Device</a>
-    </div>
-    <p class="apk-note">Android may ask you to allow installs from your browser the first time.</p>
+<!-- WAITLIST -->
+<section class="s-white pad-y" id="waitlist">
+  <div class="wrap center-col">
+    <h2 style="font-size:clamp(1.8rem,4vw,2.5rem);">Understand the system you live in.</h2>
+    <p class="lead" style="margin:16px auto 28px;">Join the waitlist for early access to mytr V1.1.</p>
+    <form class="waitlist" id="wl" novalidate>
+      <input type="email" id="wl-email" placeholder="you@email.com" aria-label="Email address" required>
+      <button type="submit" class="btn btn-primary">Join</button>
+    </form>
+    <p class="wl-note" id="wl-note">V1.1 coming soon.</p>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="ft-logo">mytr<span>.ai</span></div>
-  <div class="ft-links">
-    <a href="#crisis">The Crisis</a>
-    <a href="#ecosystem">The Ecosystem</a>
-    <a href="#features">Features</a>
-    <a href="mailto:hello@mytr.ai">Contact</a>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#top" class="brand"><span class="logo-mark"></span>mytr.ai</a>
+        <p>An intelligence layer for your body, your habits, and the environment you live in.</p>
+      </div>
+      <div class="foot-col"><h4>Product</h4><a href="#product">The device</a><a href="#body">Health intelligence</a><a href="#how">Correlation</a><a href="#home">Environment</a></div>
+      <div class="foot-col"><h4>Company</h4><a href="#vision">Vision</a><a href="#top">About</a><a href="#top">Research</a><a href="#top">Contact</a></div>
+      <div class="foot-col"><h4>Resources</h4><a href="#top">Privacy</a><a href="#top">Terms</a><a href="#top">Data &amp; security</a><a href="#top">FAQs</a></div>
+      <div class="foot-col"><h4>Follow</h4><a href="#top">LinkedIn</a><a href="#top">Instagram</a><a href="#top">X</a><a href="#top">YouTube</a></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 mytr.ai</span>
+      <span class="disclaim-line">Not intended to diagnose, treat, cure, or prevent any disease.</span>
+    </div>
   </div>
-  <div class="ft-copy">Built with care in <span class="india">India</span> · © 2025 Mytr.AI</div>
 </footer>`;
 
 export default function Home() {
   return (
     <>
-      <div dangerouslySetInnerHTML={{ __html: pageMarkup }} />
-      <ClientAnimations />
+      <div id="top" dangerouslySetInnerHTML={{ __html: pageMarkup }} />
+      <SiteScript />
     </>
   );
 }

@@ -6,21 +6,22 @@ import './globals.css';
 // restrictive network, instead of silently falling back to system-ui.
 const dmSans = DM_Sans({
   subsets: ['latin'],
-  weight: ['700', '800'],
+  weight: ['500', '600', '700'],
   variable: '--font-dm-sans',
   display: 'swap',
 });
 
 const manrope = Manrope({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600'],
   variable: '--font-manrope',
   display: 'swap',
 });
 
 export const metadata = {
-  title: 'Mytr.AI — Diabetes Technology, Made for India',
-  description: 'An always-on desk display and an AI-powered health app, sharing one account. Affordable, accessible diabetes technology built for India.',
+  title: 'mytr.ai — Understand your body',
+  description: 'One intelligent health interface that brings together your body, your habits, and the environment around you.',
+  icons: { icon: '/assets/favicon.png' },
 };
 
 export default function RootLayout({ children }) {
