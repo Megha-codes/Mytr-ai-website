@@ -11,8 +11,9 @@ import { useEffect } from 'react';
 // duplicate equalizer bars, carousel dots, and event listeners.
 export default function SiteScript() {
   useEffect(() => {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const cleanups = [];
+    try {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const eq = document.querySelector('.eq');
     if (eq) {
@@ -72,8 +73,8 @@ export default function SiteScript() {
       const COLORS = ['10,108,255', '10,108,255', '255,51,85'];
       function size() {
         dpr = Math.min(window.devicePixelRatio || 1, 2);
-        w = c.clientWidth = window.innerWidth;
-        h = c.clientHeight = window.innerHeight;
+        w = window.innerWidth;
+        h = window.innerHeight;
         c.width = w * dpr;
         c.height = h * dpr;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -273,6 +274,13 @@ export default function SiteScript() {
       };
       form.addEventListener('submit', onSubmit);
       cleanups.push(() => form.removeEventListener('submit', onSubmit));
+    }
+    } catch (err) {
+      // Never let a bug in this decorative/interactive layer take the
+      // whole page down again — see the clientWidth/clientHeight
+      // incident this was added after. Whatever ran before the throw
+      // still gets torn down correctly on unmount.
+      console.error('SiteScript init failed:', err);
     }
 
     return () => cleanups.forEach((fn) => fn());
