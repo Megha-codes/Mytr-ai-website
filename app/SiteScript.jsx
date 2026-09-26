@@ -34,6 +34,34 @@ export default function SiteScript() {
       cleanups.push(() => window.removeEventListener('scroll', onScroll));
     }
 
+    // mobile nav dropdown (hamburger)
+    const burger = document.getElementById('navBurger');
+    const navLinksPanel = document.getElementById('navLinks');
+    if (burger && navLinksPanel) {
+      const closeMenu = () => {
+        burger.classList.remove('open');
+        navLinksPanel.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
+      };
+      const onBurgerClick = () => {
+        const isOpen = navLinksPanel.classList.toggle('open');
+        burger.classList.toggle('open', isOpen);
+        burger.setAttribute('aria-expanded', String(isOpen));
+      };
+      const linkEls = navLinksPanel.querySelectorAll('a');
+      const onKeydown = (e) => {
+        if (e.key === 'Escape') closeMenu();
+      };
+      burger.addEventListener('click', onBurgerClick);
+      linkEls.forEach((a) => a.addEventListener('click', closeMenu));
+      document.addEventListener('keydown', onKeydown);
+      cleanups.push(() => {
+        burger.removeEventListener('click', onBurgerClick);
+        linkEls.forEach((a) => a.removeEventListener('click', closeMenu));
+        document.removeEventListener('keydown', onKeydown);
+      });
+    }
+
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {

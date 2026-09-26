@@ -32,10 +32,15 @@ const pageMarkup = `<div class="galaxy" aria-hidden="true">
 <header class="nav" id="nav">
   <div class="wrap nav-in">
     <a href="#top" class="brand"><span class="logo-mark"></span>mytr.ai</a>
-    <nav class="nav-links">
+    <nav class="nav-links" id="navLinks">
       <a href="#product">Product</a><a href="#how">How it works</a><a href="#body">Health intelligence</a><a href="#home">For your home</a><a href="#vision">Vision</a>
+      <div class="nav-cta-mobile">
+        <a href="/downloads/mytr-ai.apk" download class="btn btn-secondary">Download APK ↓</a>
+        <a href="#waitlist" class="btn btn-primary">Join the waitlist</a>
+      </div>
     </nav>
     <div class="nav-cta"><a href="/downloads/mytr-ai.apk" download class="btn btn-secondary">Download APK ↓</a><a href="#waitlist" class="btn btn-primary">Join the waitlist</a></div>
+    <button class="nav-burger" id="navBurger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
 </header>
 
