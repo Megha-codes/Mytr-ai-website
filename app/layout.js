@@ -1,5 +1,7 @@
 import { DM_Sans, Manrope } from 'next/font/google';
 import './globals.css';
+import Nav from './components/Nav';
+import Footer from './components/Footer';
 
 // Self-hosted at build time via next/font — no runtime fetch to Google's
 // CDN, so the brand fonts render on first paint even offline / behind a
@@ -27,7 +29,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${dmSans.variable} ${manrope.variable}`}>
-      <body>{children}</body>
+      <body>
+        <Nav />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }

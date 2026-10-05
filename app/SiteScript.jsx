@@ -26,41 +26,10 @@ export default function SiteScript() {
       }
     }
 
-    const nav = document.getElementById('nav');
-    if (nav) {
-      const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 20);
-      onScroll();
-      window.addEventListener('scroll', onScroll, { passive: true });
-      cleanups.push(() => window.removeEventListener('scroll', onScroll));
-    }
-
-    // mobile nav dropdown (hamburger)
-    const burger = document.getElementById('navBurger');
-    const navLinksPanel = document.getElementById('navLinks');
-    if (burger && navLinksPanel) {
-      const closeMenu = () => {
-        burger.classList.remove('open');
-        navLinksPanel.classList.remove('open');
-        burger.setAttribute('aria-expanded', 'false');
-      };
-      const onBurgerClick = () => {
-        const isOpen = navLinksPanel.classList.toggle('open');
-        burger.classList.toggle('open', isOpen);
-        burger.setAttribute('aria-expanded', String(isOpen));
-      };
-      const linkEls = navLinksPanel.querySelectorAll('a');
-      const onKeydown = (e) => {
-        if (e.key === 'Escape') closeMenu();
-      };
-      burger.addEventListener('click', onBurgerClick);
-      linkEls.forEach((a) => a.addEventListener('click', closeMenu));
-      document.addEventListener('keydown', onKeydown);
-      cleanups.push(() => {
-        burger.removeEventListener('click', onBurgerClick);
-        linkEls.forEach((a) => a.removeEventListener('click', closeMenu));
-        document.removeEventListener('keydown', onKeydown);
-      });
-    }
+    // Nav scroll styling + the mobile hamburger dropdown now live in
+    // app/components/Nav.jsx, since the navbar is shared across every
+    // route (including /spike-lab) via layout.js instead of being part
+    // of this page's own markup.
 
     const io = new IntersectionObserver(
       (entries) => {

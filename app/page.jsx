@@ -28,22 +28,6 @@ const pageMarkup = `<div class="galaxy" aria-hidden="true">
   <canvas id="field"></canvas>
 </div>
 
-<!-- NAV -->
-<header class="nav" id="nav">
-  <div class="wrap nav-in">
-    <a href="#top" class="brand"><span class="logo-mark"></span>mytr.ai</a>
-    <nav class="nav-links" id="navLinks">
-      <a href="#product">Product</a><a href="#how">How it works</a><a href="#body">Health intelligence</a><a href="#home">For your home</a><a href="#vision">Vision</a>
-      <div class="nav-cta-mobile">
-        <a href="/downloads/mytr-ai.apk" download class="btn btn-secondary">Download APK ↓</a>
-        <a href="#waitlist" class="btn btn-primary">Join the waitlist</a>
-      </div>
-    </nav>
-    <div class="nav-cta"><a href="/downloads/mytr-ai.apk" download class="btn btn-secondary">Download APK ↓</a><a href="#waitlist" class="btn btn-primary">Join the waitlist</a></div>
-    <button class="nav-burger" id="navBurger" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
-  </div>
-</header>
-
 <!-- HERO -->
 <section class="s-dark hero">
   <div class="wrap hero-center">
@@ -280,27 +264,7 @@ const pageMarkup = `<div class="galaxy" aria-hidden="true">
     </form>
     <p class="wl-note" id="wl-note">V1.1 coming soon.</p>
   </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="wrap">
-    <div class="foot-grid">
-      <div class="foot-brand">
-        <a href="#top" class="brand"><span class="logo-mark"></span>mytr.ai</a>
-        <p>An intelligence layer for your body, your habits, and the environment you live in.</p>
-      </div>
-      <div class="foot-col"><h4>Product</h4><a href="#product">The device</a><a href="#body">Health intelligence</a><a href="#how">Correlation</a><a href="#home">Environment</a></div>
-      <div class="foot-col"><h4>Company</h4><a href="#vision">Vision</a><a href="#top">About</a><a href="#top">Research</a><a href="#top">Contact</a></div>
-      <div class="foot-col"><h4>Resources</h4><a href="#top">Privacy</a><a href="#top">Terms</a><a href="#top">Data &amp; security</a><a href="#top">FAQs</a></div>
-      <div class="foot-col"><h4>Follow</h4><a href="#top">LinkedIn</a><a href="#top">Instagram</a><a href="#top">X</a><a href="#top">YouTube</a></div>
-    </div>
-    <div class="foot-bottom">
-      <span>© 2026 mytr.ai</span>
-      <span class="disclaim-line">Not intended to diagnose, treat, cure, or prevent any disease.</span>
-    </div>
-  </div>
-</footer>`;
+</section>`;
 
 export default function Home() {
   return (
