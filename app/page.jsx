@@ -35,7 +35,7 @@ const pageMarkup = `<div class="galaxy" aria-hidden="true">
     <h1>Understand your body.<br><span class="sub">Improve how you live.</span></h1>
     <p class="lead">One intelligent health interface that brings together your body, your habits, and the environment around you. It makes sense of how they move together.</p>
     <div class="hero-cta">
-      <a href="/downloads/mytr-ai.apk" download class="btn btn-primary">Download APK ↓</a>
+      <a href="/mytr-ai.apk" download class="btn btn-primary">Download APK ↓</a>
       <a href="#product" class="btn btn-secondary">Explore the product</a>
       <a href="#waitlist" class="btn btn-secondary">Join the waitlist</a>
     </div>

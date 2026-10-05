@@ -58,7 +58,7 @@ export default function Nav() {
             Spike Lab
           </a>
           <div className="nav-cta-mobile">
-            <a href="/downloads/mytr-ai.apk" download className="btn btn-secondary" onClick={closeMenu}>Download APK ↓</a>
+            <a href="/mytr-ai.apk" download className="btn btn-secondary" onClick={closeMenu}>Download APK ↓</a>
             <a href={`${base}#waitlist`} className="btn btn-primary" onClick={closeMenu}>Join the waitlist</a>
           </div>
         </nav>
@@ -69,7 +69,7 @@ export default function Nav() {
 
         <div className="nav-right">
           <div className="nav-cta">
-            <a href="/downloads/mytr-ai.apk" download className="btn btn-secondary">Download APK ↓</a>
+            <a href="/mytr-ai.apk" download className="btn btn-secondary">Download APK ↓</a>
             <a href={`${base}#waitlist`} className="btn btn-primary">Join the waitlist</a>
           </div>
           <button
