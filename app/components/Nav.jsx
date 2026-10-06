@@ -16,8 +16,6 @@ const LINKS = [
   { href: '#product', label: 'Product' },
   { href: '#how', label: 'How it works' },
   { href: '#body', label: 'Health intelligence' },
-  { href: '#home', label: 'For your home' },
-  { href: '#vision', label: 'Vision' },
 ];
 
 export default function Nav() {

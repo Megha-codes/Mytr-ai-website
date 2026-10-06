@@ -1486,12 +1486,14 @@ const spyLinks=[...document.querySelectorAll('.nav-links a[href^="#"]:not(.pill)
 const spy=new IntersectionObserver(es=>{ es.forEach(en=>{ if(en.isIntersecting){ spyLinks.forEach(a=>a.setAttribute('aria-current',a.getAttribute('href')==='#'+en.target.id?'true':'false')); } }); },{rootMargin:'-40% 0px -55% 0px'});
 spyLinks.forEach(a=>{ const s=document.getElementById(a.getAttribute('href').slice(1)); if(s) spy.observe(s); });
 
-/* ---- theme ---- */
-const THEMES=['auto','light','dark'];
-function applyTheme(t){ if(t==='auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme',t); $('themeBtn').setAttribute('aria-label','Colour theme: '+(t==='auto'?'automatic':t)); $('themeBtn').title='Theme: '+(t==='auto'?'automatic':t); try{ localStorage.setItem('mytr-theme',t); }catch(e){} }
-let theme='auto'; try{ theme=localStorage.getItem('mytr-theme')||'auto'; }catch(e){}
-applyTheme(THEMES.includes(theme)?theme:'auto');
-$('themeBtn').addEventListener('click',()=>{ theme=THEMES[(THEMES.indexOf(theme)+1)%3]; applyTheme(theme); toast('Theme: '+(theme==='auto'?'automatic':theme)); });
+/* ---- theme ----
+   The original Artifact had its own light/dark/auto toggle button
+   (#themeBtn) as part of its own header, which this port removed along
+   with the rest of that header (Spike Lab now shares the site-wide nav
+   instead). Spike Lab always renders in its light theme now — matching
+   the rest of mytr.ai, which doesn't offer a dark mode either — so
+   there's nothing left here to wire a toggle button to. */
+document.documentElement.setAttribute('data-theme','light');
 
 renderHero();
 

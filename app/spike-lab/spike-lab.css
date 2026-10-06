@@ -702,8 +702,8 @@ html[data-theme="dark"] .spike-lab-page .dish-well{ background:radial-gradient(c
    (removed) header was position:sticky and occupied real layout space
    above the hero. Compensate so the hero isn't hidden under the navbar,
    and give same-page anchor jumps a little clearance too. ---- */
-.spike-lab-page{ scroll-padding-top:76px; }
-.spike-lab-page .hero{ margin-top:60px; }
+.spike-lab-page{ scroll-padding-top:96px; }
+.spike-lab-page .hero{ margin-top:96px; }
 
 /* ---- Free-attempts gate: anonymous visitors get a couple of free plate
    explorations before being asked to log in (unlimited once logged in).
