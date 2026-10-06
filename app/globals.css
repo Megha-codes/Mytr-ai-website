@@ -93,8 +93,8 @@
   .logo-mark{ width:22px; height:22px; display:inline-block; flex:none; background-color:#fff; -webkit-mask:url(/assets/img/logo-mask.png) center/contain no-repeat; mask:url(/assets/img/logo-mask.png) center/contain no-repeat; transition:background-color .3s var(--ease); }
   .nav.scrolled .logo-mark{ background-color:var(--txt); }
   .foot-brand .logo-mark{ background-color:var(--txt); }
-  .brand-center{ grid-column:2; justify-self:center; font-size:1.3rem; gap:10px; }
-  .brand-center .logo-mark{ width:27px; height:27px; }
+  .brand-center{ grid-column:2; justify-self:center; font-size:1.55rem; gap:11px; }
+  .brand-center .logo-mark{ width:32px; height:32px; }
   /* min-width:0 overrides the grid item default of min-width:auto, which
      would otherwise floor this track at its content's full unwrapped
      width — forcing the grid wider than .nav-in's own max-width and

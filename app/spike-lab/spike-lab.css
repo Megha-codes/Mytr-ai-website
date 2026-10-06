@@ -541,7 +541,7 @@ html[data-theme="dark"] .spike-lab-page{
    .story below, just not .hero — a merge quirk with the later
    !important background-only .hero rules), so it's baked into this
    rule directly instead of relying on cascade order. */
-.spike-lab-page .hero{ background:#000; padding:clamp(96px,10vh,140px) 0 0; overflow:hidden; }
+.spike-lab-page .hero{ background:#000; padding:clamp(150px,16vh,190px) 0 0; overflow:hidden; }
 .spike-lab-page .hero .glow, .spike-lab-page .hero .marquee, .spike-lab-page .hero .stats, .spike-lab-page .hero .eyebrow{ display:none; }
 .spike-lab-page .hero .wrap{ text-align:left; }
 .spike-lab-page .hero-grid{ display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr); gap:24px 56px; align-items:end; }
@@ -720,7 +720,7 @@ html[data-theme="dark"] .spike-lab-page .dish-well{ background:radial-gradient(c
    dark background extending all the way to the top instead. (.hero's
    own clearance is baked directly into its padding declaration further
    up, not here — see the comment there.) */
-.spike-lab-page .story{ padding-top:96px; }
+.spike-lab-page .story{ padding-top:150px; }
 
 /* ---- Free-attempts gate: anonymous visitors get a couple of free plate
    explorations before being asked to log in (unlimited once logged in).
