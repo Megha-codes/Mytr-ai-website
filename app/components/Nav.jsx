@@ -31,10 +31,15 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const closeMenu = () => setOpen(false);
-  // The transparent, white-on-dark nav only reads correctly over the home
-  // page's own dark hero. Every other route (and the home page itself once
-  // scrolled past that hero) gets the solid floating pill treatment.
-  const pill = scrolled || !onHome;
+  // The transparent, white-on-dark nav reads correctly over any page's own
+  // dark hero — home's galaxy hero and Spike Lab's hero (spike-lab.css's
+  // .hero is hard-coded to var(--void)/#000, matching home, not the light
+  // card-based styling the rest of that page uses) are both dark, so this
+  // is scroll-driven only, the same on every route. Forcing the pill on
+  // regardless of scroll position (an earlier version of this) looked
+  // wrong on Spike Lab specifically: a solid white pill sitting directly
+  // on its black hero, where the original standalone app had a black nav.
+  const pill = scrolled;
 
   const [user, setUser] = useState(null);
   const [authOpen, setAuthOpen] = useState(false);
