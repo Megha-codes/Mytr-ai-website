@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { isLoggedIn, subscribe, requestLogin } from '../lib/auth';
 
 // Ported verbatim from the original Spike Lab Artifact's single <script>
 // IIFE (the original wrapped everything in (function(){ 'use strict'; ...
@@ -21,10 +22,62 @@ import { useEffect } from 'react';
 // — everything else (plate builder, curve predictions, food database,
 // swaps, food detail pages, zones, science/open-source sections) works
 // fully standalone.
+//
+// One deliberate, non-verbatim addition: a free-attempts gate on the
+// plate builder (the two call sites that start a *new* exploration from
+// an empty plate — add() and the empty-plate "demo" button — are guarded
+// below). Anonymous visitors get a couple of free explorations, tracked
+// in localStorage; logging in (any account, via the shared Nav) removes
+// the limit entirely.
+const SL_FREE_LIMIT = 2;
+const SL_ATTEMPTS_KEY = 'mytr-spikelab-attempts';
+function slAttemptsUsed() {
+  try { return Math.max(0, parseInt(localStorage.getItem(SL_ATTEMPTS_KEY) || '0', 10) || 0); } catch { return 0; }
+}
+function slSetAttemptsUsed(n) {
+  try { localStorage.setItem(SL_ATTEMPTS_KEY, String(n)); } catch { /* ignore */ }
+}
+
 export default function SpikeLabScript() {
   useEffect(() => {
     try {
       'use strict';
+
+      // ---------- free-attempts gate ----------
+      const slGateEl = document.getElementById('slGate');
+      const slGateMsg = document.getElementById('slGateMsg');
+      const slGateBtn = document.getElementById('slGateBtn');
+      function slRemaining() { return Math.max(0, SL_FREE_LIMIT - slAttemptsUsed()); }
+      function slIsBlocked() { return !isLoggedIn() && slRemaining() <= 0; }
+      function slUpdateBanner() {
+        if (!slGateEl) return;
+        if (isLoggedIn()) { slGateEl.hidden = true; return; }
+        const left = slRemaining();
+        slGateEl.hidden = false;
+        slGateEl.classList.toggle('blocked', left <= 0);
+        if (left > 0) {
+          slGateMsg.innerHTML = `<b>${left} free exploration${left === 1 ? '' : 's'} left.</b> Log in for unlimited access to the plate builder.`;
+        } else {
+          slGateMsg.innerHTML = `<b>You've used your free explorations.</b> Log in to keep building plates with Spike Lab.`;
+        }
+      }
+      if (slGateBtn) slGateBtn.addEventListener('click', () => requestLogin({ mode: 'login', message: 'Log in for unlimited access to Spike Lab.' }));
+      slUpdateBanner();
+      subscribe(slUpdateBanner);
+      // Consumes one free attempt for an anonymous visitor starting a new
+      // exploration (an add() onto an empty plate, or the empty-plate demo
+      // button); returns false — and opens the login modal — once they're
+      // out. Logged-in visitors always return true (unlimited).
+      function slStartAttempt() {
+        if (isLoggedIn()) return true;
+        if (slRemaining() <= 0) {
+          requestLogin({ mode: 'login', message: "You've used your 2 free Spike Lab explorations. Log in to keep going — it's free and unlimited." });
+          return false;
+        }
+        slSetAttemptsUsed(slAttemptsUsed() + 1);
+        slUpdateBanner();
+        return true;
+      }
 /* ---------- DATA (MIT licence) ----------
  Single foods: [id, name, emoji, category, serving, carbs (available g), fibre g, protein g, fat g, GI, source, swaps]
  source: T = international GI tables (Atkinson 2008/2021), I = Indian GI studies, E = estimated from ingredients and recipe
@@ -652,7 +705,7 @@ function moreFoods(){ if(shownN>=shownList.length) return; const next=shownList.
 new IntersectionObserver(es=>{ if(es[0].isIntersecting) moreFoods(); },{root:$('scroller'),rootMargin:'0px 0px 600px 0px'}).observe($('sentinel'));
 $('subcats').addEventListener('click',e=>{ const b=e.target.closest('[data-sub]'); if(!b) return; subgrp=b.dataset.sub; renderFoods(); $('scroller').scrollTop=0; });
 document.addEventListener('click',e=>{ const a=e.target.closest('[data-add]'); if(!a) return; e.preventDefault(); add(a.dataset.add,1); toast(`${F[a.dataset.add].name} added to plate`); });
-function add(id,d){ const q=Math.max(0,(plate.get(id)||0)+d); if(q<=0) plate.delete(id); else plate.set(id,Math.round(q*2)/2); update(); }
+function add(id,d){ if(d>0 && plate.size===0 && !slStartAttempt()) return; const q=Math.max(0,(plate.get(id)||0)+d); if(q<=0) plate.delete(id); else plate.set(id,Math.round(q*2)/2); update(); }
 
 /* ---------- profiles ---------- */
 function setProf(p){ prof=p; document.querySelectorAll('[data-p]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.p===prof)); update(); if(typeof renderHero==='function'&&$('hChips').children.length) renderHero(); if(currentDetail) renderDetail(currentDetail,true); }
@@ -665,7 +718,7 @@ $('clear').addEventListener('click',()=>{ plate.clear(); update(); });
 function renderPlate(pr){
   const ul=$('items');
   if(!plate.size){ ul.innerHTML=`<li style="border:0;display:block"><div class="empty"><span class="e">🍽</span>Your plate is empty. Tap + on any food, or try <button class="linkbtn" type="button" id="demo">idli with filter coffee</button>.</div></li>`;
-    $('demo').addEventListener('click',()=>{ plate=new Map([['idli_coffee',1]]); update(); });
+    $('demo').addEventListener('click',()=>{ if(!slStartAttempt()) return; plate=new Map([['idli_coffee',1]]); update(); });
   } else ul.innerHTML=[...plate].map(([id,q])=>{ const f=F[id]; return `<li><span class="e" aria-hidden="true">${f.emoji}</span><span class="n"><a href="${link(id)}">${escapeHTML(f.name)}</a><small>${escapeHTML(f.serving)} · ${Math.round(f.carbs*q)} g carbs</small></span>
     <span class="step"><button type="button" data-step="${id}" data-d="-0.5" aria-label="Less ${escapeHTML(f.name)}">−</button><span>${fmtQ(q)}</span><button type="button" data-step="${id}" data-d="0.5" aria-label="More ${escapeHTML(f.name)}">+</button></span></li>`; }).join('');
   const n=pr.n;

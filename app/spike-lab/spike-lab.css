@@ -704,3 +704,12 @@ html[data-theme="dark"] .spike-lab-page .dish-well{ background:radial-gradient(c
    and give same-page anchor jumps a little clearance too. ---- */
 .spike-lab-page{ scroll-padding-top:76px; }
 .spike-lab-page .hero{ margin-top:60px; }
+
+/* ---- Free-attempts gate: anonymous visitors get a couple of free plate
+   explorations before being asked to log in (unlimited once logged in).
+   Shown/hidden and filled in by SpikeLabScript.jsx. ---- */
+.spike-lab-page .sl-gate{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px; background:var(--card); border:1px solid var(--line); border-radius:20px; padding:16px 20px; margin:0 0 28px; box-shadow:var(--shadow); }
+.spike-lab-page .sl-gate p{ margin:0; font-size:.92rem; color:var(--txt-dim); }
+.spike-lab-page .sl-gate p b{ color:var(--txt); }
+.spike-lab-page .sl-gate.blocked{ border-color:rgba(var(--red-rgb),.3); background:rgba(var(--red-rgb),.05); }
+.spike-lab-page .sl-gate.blocked p{ color:var(--txt); }

@@ -146,6 +146,11 @@ const markup = `<main>
       <p>Tap any food to see its curve and how to steady it. Tap + to add it to your plate, then adjust portions and watch the prediction change.</p>
     </div>
 
+    <div class="sl-gate" id="slGate" hidden>
+      <p id="slGateMsg"></p>
+      <button type="button" class="btn btn-primary" id="slGateBtn">Log in</button>
+    </div>
+
     <div class="builder">
       <div class="browse" id="browse">
         <label class="search">

@@ -2,11 +2,16 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { getUser, subscribe, restoreSession, logout } from '../lib/auth';
+import AuthModal from './AuthModal';
 
 // Shared site-wide navbar: rendered once from layout.js so every route
 // (home, Spike Lab, ...) gets the identical header. Logo sits centered
-// via a 3-column grid (links | logo | cta+burger); the active route gets
-// a highlighted pill in the left-hand link group.
+// via a 3-column grid (links | logo | cta+burger). Spike Lab is a
+// standing highlighted button at the far left of the link group, not
+// just an active-route state. The nav is transparent/white-on-dark only
+// over the home page's own dark hero; everywhere else (any other route,
+// or the home page once scrolled) it's the solid floating pill.
 const LINKS = [
   { href: '#product', label: 'Product' },
   { href: '#how', label: 'How it works' },
@@ -28,6 +33,15 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const closeMenu = () => setOpen(false);
+  // The transparent, white-on-dark nav only reads correctly over the home
+  // page's own dark hero. Every other route (and the home page itself once
+  // scrolled past that hero) gets the solid floating pill treatment.
+  const pill = scrolled || !onHome;
+
+  const [user, setUser] = useState(null);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [authMode, setAuthMode] = useState('login');
+  const [authMessage, setAuthMessage] = useState('');
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -42,13 +56,35 @@ export default function Nav() {
     return () => document.removeEventListener('keydown', onKeydown);
   }, []);
 
+  // Nav mounts once per page load (it lives in layout.js), so this is a
+  // fine place to both seed the initial user from localStorage and kick
+  // off the one-time server check that confirms/refreshes that session.
+  useEffect(() => {
+    setUser(getUser());
+    const unsubscribe = subscribe(setUser);
+    restoreSession();
+    return unsubscribe;
+  }, []);
+
+  // Lets other code (the Spike Lab free-attempts gate) ask this nav to
+  // open the login modal without owning any of its state itself.
+  useEffect(() => {
+    const onOpenRequest = (e) => {
+      setAuthMode((e.detail && e.detail.mode) || 'login');
+      setAuthMessage((e.detail && e.detail.message) || '');
+      setAuthOpen(true);
+      setOpen(false);
+    };
+    window.addEventListener('mytr-auth:open', onOpenRequest);
+    return () => window.removeEventListener('mytr-auth:open', onOpenRequest);
+  }, []);
+
+  const openAuth = (m) => { setAuthMode(m); setAuthMessage(''); setAuthOpen(true); closeMenu(); };
+
   return (
-    <header className={`nav${scrolled ? ' scrolled' : ''}`} id="nav">
+    <header className={`nav${pill ? ' scrolled' : ''}`} id="nav">
       <div className="wrap nav-in">
         <nav className={`nav-links${open ? ' open' : ''}`} id="navLinks" aria-label="Primary">
-          {LINKS.map((l) => (
-            <a key={l.href} href={`${base}${l.href}`} onClick={closeMenu}>{l.label}</a>
-          ))}
           <a
             href="/spike-lab"
             className="nav-spike"
@@ -57,9 +93,19 @@ export default function Nav() {
           >
             Spike Lab
           </a>
+          {LINKS.map((l) => (
+            <a key={l.href} href={`${base}${l.href}`} onClick={closeMenu}>{l.label}</a>
+          ))}
           <div className="nav-cta-mobile">
             <a href="/mytr-ai.apk" download className="btn btn-secondary" onClick={closeMenu}>Download APK ↓</a>
-            <a href={`${base}#waitlist`} className="btn btn-primary" onClick={closeMenu}>Join the waitlist</a>
+            {user ? (
+              <>
+                <span className="nav-user">{user.name || user.email}</span>
+                <button type="button" className="btn btn-secondary" onClick={() => { logout(); closeMenu(); }}>Log out</button>
+              </>
+            ) : (
+              <button type="button" className="btn btn-primary" onClick={() => openAuth('login')}>Login</button>
+            )}
           </div>
         </nav>
 
@@ -70,7 +116,14 @@ export default function Nav() {
         <div className="nav-right">
           <div className="nav-cta">
             <a href="/mytr-ai.apk" download className="btn btn-secondary">Download APK ↓</a>
-            <a href={`${base}#waitlist`} className="btn btn-primary">Join the waitlist</a>
+            {user ? (
+              <>
+                <span className="nav-user">{user.name || user.email}</span>
+                <button type="button" className="btn btn-secondary" onClick={logout}>Log out</button>
+              </>
+            ) : (
+              <button type="button" className="btn btn-primary" onClick={() => openAuth('login')}>Login</button>
+            )}
           </div>
           <button
             className={`nav-burger${open ? ' open' : ''}`}
@@ -83,6 +136,14 @@ export default function Nav() {
           </button>
         </div>
       </div>
+
+      <AuthModal
+        open={authOpen}
+        mode={authMode}
+        message={authMessage}
+        onClose={() => setAuthOpen(false)}
+        onSuccess={() => setAuthOpen(false)}
+      />
     </header>
   );
 }

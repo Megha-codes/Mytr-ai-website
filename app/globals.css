@@ -77,9 +77,10 @@
   .s-dark .btn-secondary:hover{ border-color:rgba(255,255,255,.55); }
 
   /* ============ NAV ============ */
-  header.nav{ position:fixed; inset:0 0 auto 0; z-index:50; transition:background .35s var(--ease), backdrop-filter .35s var(--ease), border-color .35s var(--ease); border-bottom:1px solid transparent; }
-  header.nav.scrolled{ background:rgba(255,255,255,.72); backdrop-filter:saturate(1.6) blur(18px); -webkit-backdrop-filter:saturate(1.6) blur(18px); border-bottom:1px solid var(--line); }
-  .nav-in{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:18px; height:60px; }
+  header.nav{ position:fixed; inset:0 0 auto 0; z-index:50; padding:0 var(--pad); transition:padding .35s var(--ease); }
+  header.nav.scrolled{ padding:14px var(--pad) 0; }
+  .nav-in{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:18px; height:60px; max-width:var(--maxw); margin:0 auto; padding:0 10px 0 22px; border-radius:999px; border:1px solid transparent; transition:background .35s var(--ease), backdrop-filter .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease), height .35s var(--ease); }
+  .nav.scrolled .nav-in{ height:56px; background:rgba(255,255,255,.86); backdrop-filter:saturate(1.6) blur(18px); -webkit-backdrop-filter:saturate(1.6) blur(18px); border-color:rgba(0,0,0,.06); box-shadow:0 10px 30px -12px rgba(0,0,0,.22), 0 1px 1px rgba(0,0,0,.04); }
   .brand{ font-family:var(--font-dm-sans),sans-serif; font-weight:700; font-size:1.06rem; letter-spacing:-.03em; color:#fff; display:flex; align-items:center; gap:8px; transition:color .3s var(--ease); }
   .nav.scrolled .brand{ color:var(--txt); }
   .logo-mark{ width:22px; height:22px; display:inline-block; flex:none; background-color:#fff; -webkit-mask:url(/assets/img/logo-mask.png) center/contain no-repeat; mask:url(/assets/img/logo-mask.png) center/contain no-repeat; transition:background-color .3s var(--ease); }
@@ -94,8 +95,17 @@
   .nav-links a[aria-current="page"]:hover{ color:#fff; }
   .nav.scrolled .nav-links a[aria-current="page"]{ color:var(--blue); background:rgba(var(--blue-rgb),.1); }
   .nav.scrolled .nav-links a[aria-current="page"]:hover{ color:var(--blue); }
+  /* Spike Lab: a standing highlighted pill, not just an active-route state —
+     more specific than the rules above so it keeps its own color scheme
+     regardless of scroll state or active route. */
+  .nav-links a.nav-spike{ color:#fff; font-weight:600; background:var(--red); padding:7px 16px; margin:0; border-radius:980px; }
+  .nav-links a.nav-spike:hover{ color:#fff; background:#e22a4a; }
+  .nav.scrolled .nav-links a.nav-spike{ color:#fff; background:var(--red); }
+  .nav.scrolled .nav-links a.nav-spike:hover{ color:#fff; background:#e22a4a; }
   .nav-right{ grid-column:3; justify-self:end; display:flex; align-items:center; gap:14px; }
   .nav-cta{ display:flex; align-items:center; gap:10px; } .nav-cta .btn{ padding:8px 17px; font-size:.86rem; }
+  .nav-user{ font-size:.86rem; font-weight:600; color:rgba(255,255,255,.9); max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .nav.scrolled .nav-user{ color:var(--txt); }
   .nav-cta-mobile{ display:none; }
   .nav-burger{ display:none; flex-direction:column; justify-content:center; align-items:center; gap:5px; width:34px; height:34px; padding:0; background:transparent; border:none; cursor:pointer; flex:none; }
   .nav-burger span{ display:block; width:22px; height:2px; border-radius:2px; background:#fff; transition:transform .25s var(--ease), opacity .2s var(--ease), background .25s var(--ease); }
@@ -105,6 +115,27 @@
   .nav-burger.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
   @keyframes pulse{ 0%,100%{ box-shadow:0 0 10px 1px rgba(var(--blue-rgb),.8), 0 0 0 0 rgba(var(--blue-rgb),.4);} 50%{ box-shadow:0 0 10px 1px rgba(var(--blue-rgb),.8), 0 0 0 6px rgba(var(--blue-rgb),0);} }
   @keyframes pulse2{ 0%,100%{ opacity:.6; } 50%{ opacity:1; } }
+
+  /* ============ AUTH MODAL ============ */
+  .auth-backdrop{ position:fixed; inset:0; z-index:200; background:rgba(5,5,7,.6); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; padding:20px; animation:authFade .2s var(--ease); }
+  @keyframes authFade{ from{ opacity:0; } to{ opacity:1; } }
+  .auth-modal{ position:relative; width:100%; max-width:380px; background:var(--paper); color:var(--txt); border-radius:24px; padding:32px 28px 28px; box-shadow:0 30px 80px -20px rgba(0,0,0,.5); }
+  .auth-close{ position:absolute; top:14px; right:14px; width:32px; height:32px; border-radius:50%; border:none; background:var(--paper-2); color:var(--txt-dim); font-size:1.3rem; line-height:1; cursor:pointer; }
+  .auth-close:hover{ color:var(--txt); }
+  .auth-tabs{ display:flex; gap:4px; background:var(--paper-2); border-radius:980px; padding:4px; margin-bottom:20px; }
+  .auth-tabs button{ flex:1; padding:8px 0; border:none; background:transparent; border-radius:980px; font-family:var(--font-dm-sans),sans-serif; font-weight:600; font-size:.86rem; color:var(--txt-dim); cursor:pointer; transition:background .2s var(--ease), color .2s var(--ease); }
+  .auth-tabs button.on{ background:#fff; color:var(--txt); box-shadow:0 1px 4px rgba(0,0,0,.12); }
+  .auth-title{ font-size:1.3rem; margin:0 0 6px; }
+  .auth-message{ font-size:.86rem; color:var(--txt-dim); margin:0 0 18px; }
+  .auth-form{ display:flex; flex-direction:column; gap:14px; }
+  .auth-field{ display:flex; flex-direction:column; gap:6px; font-size:.82rem; font-weight:600; color:var(--txt-dim); }
+  .auth-field input{ font-family:var(--font-manrope),sans-serif; font-weight:400; font-size:.96rem; padding:11px 15px; border-radius:14px; background:var(--paper-2); color:var(--txt); border:1px solid var(--line); outline:none; transition:border-color .2s var(--ease); }
+  .auth-field input:focus{ border-color:var(--blue); }
+  .auth-field small{ font-weight:400; color:var(--txt-faint); }
+  .auth-check{ display:flex; align-items:flex-start; gap:8px; font-size:.82rem; color:var(--txt-dim); cursor:pointer; }
+  .auth-check input{ margin-top:3px; }
+  .auth-error{ font-size:.82rem; color:var(--red); margin:0; }
+  .auth-submit{ width:100%; padding:12px 0; margin-top:4px; }
 
   /* ============ HERO (dark galaxy) ============ */
   .hero{ padding-top:clamp(110px,15vh,156px); padding-bottom:clamp(60px,8vh,96px); }
