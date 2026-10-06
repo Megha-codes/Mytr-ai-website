@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { isLoggedIn, subscribe, requestLogin } from '../lib/auth';
+import { isLoggedIn, subscribe, requestLogin, getAccessToken } from '../lib/auth';
 
 // Ported verbatim from the original Spike Lab Artifact's single <script>
 // IIFE (the original wrapped everything in (function(){ 'use strict'; ...
@@ -1026,18 +1026,96 @@ CATALOG (id|name|serving):
 ${CATALOG}`;
   return await sample.json(prompt,{images:file,signal,cache:false});
 }
+
+/* ---- mytr.ai detector: this is the "self-hosted detector plugin" the
+   message above refers to — api.mytr.ai (the same backend the login
+   system talks to) has a real POST /api/v1/nutrition/analyze-image
+   endpoint (Gemini Vision), which the original Artifact never had a way
+   to use. It requires a signed-in session (the endpoint 401s without a
+   valid Bearer token), so this detector is only registered while
+   isLoggedIn() — see refreshMytrDetector() below, which re-runs on every
+   auth change so signing in or out updates this live, no reload needed.
+   Unlike Claude's detector, Gemini here only returns a food's name and
+   portion size, not a nutrition breakdown — so items are matched against
+   this page's own food catalog by name (matchFoodByName) to get real
+   carbs/fibre/protein/fat/GI; an item that doesn't match isn't added
+   with fabricated nutrition numbers (misleading for a glucose tool) —
+   it's called out in the summary instead, same as a low-confidence
+   catalog miss would be. */
+function blobToBase64(blob){
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=()=>res(String(r.result).split(',')[1]||'');
+    r.onerror=()=>rej(new Error('read failed'));
+    r.readAsDataURL(blob);
+  });
+}
+function matchFoodByName(name){
+  const toks=String(name||'').toLowerCase().split(/\s+/).filter(Boolean);
+  if(!toks.length) return null;
+  const pool=FOODS.filter(f=>!f.parts && f.src!=='U' && f.src!=='M' && matches(f,toks));
+  if(!pool.length) return null;
+  return pool.slice().sort((a,b)=>a.name.length-b.name.length)[0];
+}
+async function mytrDetect(file, signal){
+  const token=getAccessToken();
+  if(!token){ const e=new Error('signed out'); e.code='mytr_signed_out'; throw e; }
+  const base64=await blobToBase64(file);
+  let res;
+  try{
+    res=await fetch('https://api.mytr.ai/api/v1/nutrition/analyze-image',{
+      method:'POST', signal,
+      headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
+      body:JSON.stringify({base64_image:base64}),
+    });
+  }catch(e){ if(e.name==='AbortError'){ const c=new Error('cancelled'); c.code='cancelled'; throw c; } const c=new Error('network'); c.code='mytr_unavailable'; throw c; }
+  if(!res.ok){
+    const e=new Error('detect failed');
+    e.code = res.status===401 ? 'mytr_signed_out' : res.status===503 || res.status===502 ? 'mytr_unavailable' : res.status===422 ? 'mytr_rejected' : 'upstream_error';
+    throw e;
+  }
+  const data=await res.json();
+  const detected=Array.isArray(data.food_items)?data.food_items:[];
+  const items=[]; const missed=[];
+  for(const it of detected){
+    const m=matchFoodByName(it.name);
+    if(m){ items.push({id:m.id, servings:1, confidence:0.65}); continue; }
+    const nm=String(it.name||'').trim();
+    if(nm) missed.push(nm);
+  }
+  const notes = !detected.length ? 'No food found in this photo.'
+    : missed.length ? `Also saw ${missed.join(', ')} — not in the food database here, so add ${missed.length>1?'them':'it'} manually if you'd like.`
+    : '';
+  return {title:'Your meal', items, notes};
+}
+function refreshMytrDetector(){
+  const i=detectors.findIndex(d=>d.id==='mytr');
+  if(isLoggedIn()){
+    if(i<0) SpikeLab.registerDetector({id:'mytr', name:'mytr.ai photo detector', detect:mytrDetect});
+  } else if(i>=0){
+    detectors.splice(i,1); refreshDetPick();
+  }
+  if(detState!=='checking' && !$('snapImg').src){
+    detState = detectors.length ? 'ready' : 'none';
+    if(detState==='none') detReason='Log in to use the meal-photo detector — it\'s free once you have an account.';
+    setStatus(detState==='ready'?'Detector ready. Take or upload a photo of your meal.':escapeHTML(detReason));
+  }
+}
+subscribe(refreshMytrDetector);
+
 let detState='checking', detReason='';
 const detReady=(async()=>{
   try{
-    if(!window.claude||!window.claude.use){ detState='none'; detReason='This copy of Spike Lab is not running inside claude.ai, so the built-in detector is off. A self-hosted detector plugin can be added.'; return; }
-    const sample=await window.claude.use('sample');
-    if(!sample){ detState='none'; detReason='Claude is not available to this page in this view. Open Spike Lab in claude.ai on the web while signed in.'; return; }
-    const lim=await sample.limits().catch(()=>null);
-    if(!lim||!lim.images){ detState='none'; detReason='This Claude view can\'t send photos to the detector. Try claude.ai in a desktop or mobile browser.'; return; }
-    SpikeLab.registerDetector({id:'claude',name:'Claude vision (built in)',detect:claudeDetect});
-    detState='ready';
-  }catch(e){ detState='none'; detReason='The detector could not start.'; }
-  finally{ if(!$('snapImg').src) setStatus(detState==='ready'?'Detector ready. Take or upload a photo of your meal.':escapeHTML(detReason)); }
+    if(window.claude&&window.claude.use){
+      const sample=await window.claude.use('sample');
+      const lim=sample&&await sample.limits().catch(()=>null);
+      if(sample&&lim&&lim.images) SpikeLab.registerDetector({id:'claude',name:'Claude vision (built in)',detect:claudeDetect});
+    }
+  }catch(e){ /* Claude sandbox not available here — fine, mytr.ai's own detector below covers it */ }
+  refreshMytrDetector();
+  if(!detectors.length){ detState='none'; detReason='Log in to use the meal-photo detector — it\'s free once you have an account.'; }
+  else detState='ready';
+  if(!$('snapImg').src) setStatus(detState==='ready'?'Detector ready. Take or upload a photo of your meal.':escapeHTML(detReason));
 })();
 async function setupClaudeDetector(){ return detReady; }
 async function toJpeg(file){
@@ -1073,7 +1151,7 @@ async function runDetect(file){
     applyDetection(res);
   }catch(e){
     const c=(e&&e.code)||'upstream_error';
-    const msg={cancelled:'Stopped.',not_granted:'The detector was not allowed. Reload the page and choose Allow when claude.ai asks, to use it.',sampling_disabled:'Claude isn\'t available for this account or organisation.',images_unavailable:'This Claude view can\'t send photos. Try claude.ai in a browser.',rate_limited:'You\'ve hit a usage limit for now. Try again in a little while.',image_rejected:'That image couldn\'t be read. Try another photo.',refused:'The detector couldn\'t analyse this photo. Try a clearer photo of the food.',invalid_json:'The detector replied in an unexpected format. Try again.',session_expired:'Your claude.ai session expired. Sign in again and reload.'}[c]||'Something went wrong while detecting. Try again.';
+    const msg={cancelled:'Stopped.',not_granted:'The detector was not allowed. Reload the page and choose Allow when claude.ai asks, to use it.',sampling_disabled:'Claude isn\'t available for this account or organisation.',images_unavailable:'This Claude view can\'t send photos. Try claude.ai in a browser.',rate_limited:'You\'ve hit a usage limit for now. Try again in a little while.',image_rejected:'That image couldn\'t be read. Try another photo.',refused:'The detector couldn\'t analyse this photo. Try a clearer photo of the food.',invalid_json:'The detector replied in an unexpected format. Try again.',session_expired:'Your claude.ai session expired. Sign in again and reload.',mytr_signed_out:'You were signed out. Log in again to keep using the detector.',mytr_unavailable:'The photo detector is temporarily unavailable. Try again shortly.',mytr_rejected:'That photo couldn\'t be analysed. Try a clearer photo of the food.'}[c]||'Something went wrong while detecting. Try again.';
     setStatus(escapeHTML(msg)+(c!=='cancelled'?` <span class="hint">(code: ${escapeHTML(c)})</span>`:''));
   }
 }
